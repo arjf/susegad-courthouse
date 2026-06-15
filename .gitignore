@@ -41,3 +41,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+check-mobile*.ts
+check-mobile*.mjs
+mobile-check.test.ts
+playwright.config.ts
+test-results/
+*.test.ts
+*.test.js
