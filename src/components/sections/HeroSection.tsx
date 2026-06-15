@@ -1,9 +1,12 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/config";
 import AvailabilityCalendar from "./AvailabilityCalendar";
 import PrimaryButton from "@/components/ui/PrimaryButton";
+
+const HeroMap = dynamic(() => import("@/components/sections/MapSection"), { ssr: false });
 
 export default function HeroSection() {
   const containerVariants = {
@@ -40,9 +43,9 @@ export default function HeroSection() {
       </div>
 
       <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col md:flex-row">
-        {/* Left: text + availability */}
+        {/* Left: text + stats */}
         <motion.div
-          className="flex flex-1 flex-col justify-center px-6 pt-28 pb-8 md:px-12 md:pb-0 lg:px-16"
+          className="flex flex-1 flex-col justify-center px-6 pt-28 pb-6 md:px-12 md:pb-0 lg:px-16"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -97,87 +100,17 @@ export default function HeroSection() {
               <p className="font-body text-xs text-primary/60">{siteConfig.property.reviewCount} reviews</p>
             </div>
           </motion.div>
-
-          {/* Availability calendar */}
-          <motion.div variants={itemVariants} className="mt-6 max-w-sm">
-            <AvailabilityCalendar />
-          </motion.div>
         </motion.div>
 
-        {/* Right: decorative vector art */}
+        {/* Right: interactive map + availability */}
         <motion.div
-          className="relative flex flex-1 items-center justify-center px-6 py-12 md:px-12 lg:px-16"
-          initial={{ opacity: 0, scale: 0.9 }}
+          className="flex flex-1 flex-col justify-center gap-4 px-6 pb-12 md:px-12 md:pb-0 lg:px-16"
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          <div className="relative w-full max-w-lg">
-            {/* Main decorative illustration */}
-            <svg viewBox="0 0 500 500" fill="none" className="h-auto w-full">
-              {/* Sky gradient */}
-              <rect width="500" height="500" rx="20" fill="url(#heroGrad)" />
-
-              {/* Sun */}
-              <circle cx="380" cy="100" r="50" fill="#B08D57" opacity="0.6" />
-              <circle cx="380" cy="100" r="35" fill="#B08D57" opacity="0.9" />
-
-              {/* Goan house */}
-              <rect x="180" y="250" width="160" height="120" rx="4" fill="#F7F3EB" stroke="#1E3A34" strokeWidth="2" />
-              {/* Roof */}
-              <polygon points="150,260 260,180 370,260" fill="#A05A2C" stroke="#1E3A34" strokeWidth="2" />
-              {/* Door */}
-              <rect x="230" y="300" width="40" height="70" rx="20" fill="#1E3A34" />
-              {/* Windows */}
-              <rect x="195" y="280" width="25" height="25" rx="2" fill="#B08D57" opacity="0.6" />
-              <rect x="280" y="280" width="25" height="25" rx="2" fill="#B08D57" opacity="0.6" />
-
-              {/* Palm trees */}
-              <line x1="120" y1="280" x2="120" y2="370" stroke="#1E3A34" strokeWidth="4" strokeLinecap="round" />
-              <path d="M120 280Q95 260 80 275Q110 265 120 280Z" fill="#1E3A34" />
-              <path d="M120 280Q145 250 160 265Q130 260 120 280Z" fill="#1E3A34" />
-              <path d="M120 280Q110 240 95 245Q115 255 120 280Z" fill="#1E3A34" />
-              <path d="M120 280Q135 235 145 240Q130 255 120 280Z" fill="#1E3A34" />
-
-              <line x1="380" y1="250" x2="380" y2="340" stroke="#1E3A34" strokeWidth="3" strokeLinecap="round" />
-              <path d="M380 250Q360 235 350 245Q370 240 380 250Z" fill="#1E3A34" />
-              <path d="M380 250Q400 225 410 235Q390 235 380 250Z" fill="#1E3A34" />
-
-              {/* Greenery / bushes */}
-              <ellipse cx="200" cy="370" rx="60" ry="20" fill="#1E3A34" opacity="0.7" />
-              <ellipse cx="320" cy="375" rx="50" ry="15" fill="#1E3A34" opacity="0.6" />
-              <ellipse cx="160" cy="370" rx="30" ry="12" fill="#1E3A34" opacity="0.5" />
-
-              {/* Walkway */}
-              <rect x="240" y="370" width="20" height="80" rx="2" fill="#1E3A34" opacity="0.3" />
-
-              {/* Gate */}
-              <rect x="235" y="420" width="30" height="35" rx="15" fill="none" stroke="#1E3A34" strokeWidth="2" />
-              <line x1="250" y1="420" x2="250" y2="455" stroke="#1E3A34" strokeWidth="1" />
-
-              {/* Birds */}
-              <path d="M300 140Q305 135 310 140" stroke="#1E3A34" strokeWidth="1.5" fill="none" opacity="0.5" />
-              <path d="M320 130Q325 125 330 130" stroke="#1E3A34" strokeWidth="1.5" fill="none" opacity="0.5" />
-              <path d="M290 145Q294 140 298 145" stroke="#1E3A34" strokeWidth="1" fill="none" opacity="0.4" />
-
-              <defs>
-                <linearGradient id="heroGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#F7F3EB" />
-                  <stop offset="100%" stopColor="#E8E0D0" />
-                </linearGradient>
-              </defs>
-            </svg>
-
-            {/* Floating badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.5 }}
-              className="absolute -bottom-2 -left-4 rounded-2xl border border-border bg-secondary px-4 py-2 shadow-sm"
-            >
-              <p className="font-heading text-sm font-semibold text-primary">Self-catered stay</p>
-              <p className="font-body text-[11px] text-muted-foreground">No services — just freedom</p>
-            </motion.div>
-          </div>
+          <HeroMap compact />
+          <AvailabilityCalendar />
         </motion.div>
       </div>
     </section>

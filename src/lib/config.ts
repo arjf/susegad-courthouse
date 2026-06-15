@@ -9,6 +9,7 @@ export const siteConfig = {
     phone: "+91 99999 99999",
     address: "Near Anjuna Beach, Anjuna, Goa 403509, India",
     mapCoordinates: { lat: 15.5839, lng: 73.7489 }, // 15°35'02.0"N 73°44'55.9"E
+    anjunaBeachCoordinates: { lat: 15.576, lng: 73.7403 },
   },
 
   social: {
