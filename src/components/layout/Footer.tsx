@@ -22,7 +22,8 @@ export default function Footer({ links, socialLinks, logo }: FooterProps) {
           <div className="md:col-span-2">
             <div className="mb-4">{logo}</div>
             <p className="font-body text-sm leading-relaxed text-primary-foreground/70 max-w-md">
-              Experience the art of Susegad living at our heritage courtyard home in Goa.
+              A heritage standalone home, five minutes from Anjuna Beach. Self-catered stays
+              surrounded by nature-preserved greenery. No frills. Just Goa.
             </p>
           </div>
           <div>

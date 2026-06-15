@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 
 interface WhatsAppFloatProps {
@@ -9,14 +12,20 @@ export default function WhatsAppFloat({ phoneNumber, message }: WhatsAppFloatPro
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
-    <a
+    <motion.a
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-accent1 text-primary-foreground shadow-lg transition-transform hover:scale-110 hover:bg-accent1/90"
+      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-accent1 text-primary-foreground shadow-lg"
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      animate={{ scale: [1, 1.05, 1] }}
+      transition={{
+        scale: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+      }}
       aria-label="Chat on WhatsApp"
     >
       <MessageCircle size={28} />
-    </a>
+    </motion.a>
   );
 }
