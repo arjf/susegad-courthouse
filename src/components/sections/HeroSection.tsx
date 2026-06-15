@@ -68,12 +68,12 @@ export default function HeroSection() {
           </motion.h1>
           <motion.p
             variants={itemVariants}
-            className="mt-3 max-w-lg font-body text-sm leading-relaxed text-primary/70 md:text-lg"
+            className="mt-2 max-w-lg font-body text-sm leading-relaxed text-primary/70 md:text-lg"
           >
             Five minutes from Anjuna Beach. A private standalone home surrounded by preserved greenery.
             Stocked kitchen, fast WiFi, washing machine — live Goa at your own pace.
           </motion.p>
-          <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-2">
+          <motion.div variants={itemVariants} className="mt-3 flex flex-wrap gap-2">
             <PrimaryButton text="Book on Airbnb" variant="accent1" size="lg" href={siteConfig.booking.airbnbUrl} />
             <PrimaryButton text="View Experiences" variant="outline" size="lg" />
           </motion.div>
@@ -81,7 +81,7 @@ export default function HeroSection() {
           {/* Quick stats */}
           <motion.div
             variants={itemVariants}
-            className="mt-5 flex items-center gap-4 border-t border-border pt-4"
+            className="mt-3 flex items-center gap-4 border-t border-border pt-3"
           >
             <div className="text-center">
               <p className="font-heading text-lg font-bold text-primary">{siteConfig.property.bedrooms}</p>
@@ -102,7 +102,7 @@ export default function HeroSection() {
 
         {/* Right: interactive map + availability */}
         <motion.div
-          className="flex flex-1 flex-col justify-center gap-3 px-6 pb-8 md:px-12 md:pb-0 lg:px-16"
+          className="flex flex-1 flex-col justify-center gap-2 px-6 pb-6 md:px-12 md:pb-0 lg:px-16"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
