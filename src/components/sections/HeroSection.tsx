@@ -27,12 +27,13 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative flow-root bg-gradient-to-br from-secondary via-secondary to-primary/5">
+    <section className="relative overflow-hidden bg-gradient-to-br from-secondary via-secondary to-primary/5">
       {/* Decorative background SVG */}
       <div className="pointer-events-none absolute inset-0 select-none opacity-[0.04] overflow-hidden max-w-full">
         <svg
           viewBox="0 0 1440 900"
           fill="none"
+          preserveAspectRatio="none"
           className="h-full w-full max-w-full"
         >
           <path d="M0 900V0h1440v900H0z" fill="#1E3A34" />
