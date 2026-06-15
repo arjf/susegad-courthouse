@@ -22,8 +22,8 @@ export default function HeroSection() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-secondary via-secondary to-primary/5">
       {/* Decorative background SVG */}
-      <div className="pointer-events-none absolute inset-0 select-none opacity-[0.04]">
-        <svg viewBox="0 0 1440 900" fill="none" className="h-full w-full">
+      <div className="pointer-events-none absolute inset-0 select-none opacity-[0.04] overflow-hidden max-w-full">
+        <svg viewBox="0 0 1440 900" fill="none" className="h-full w-full max-w-full">
           <path d="M0 900V0h1440v900H0z" fill="#1E3A34" />
           <circle cx="1200" cy="200" r="400" fill="#B08D57" />
           <circle cx="200" cy="700" r="300" fill="#B08D57" />
@@ -36,8 +36,8 @@ export default function HeroSection() {
       </div>
 
       {/* Foreground decorative palms */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 select-none opacity-[0.03]">
-        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="h-40 w-full">
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 select-none opacity-[0.03] overflow-hidden max-w-full">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="h-40 w-full max-w-full">
           <path d="M0 120V60Q180 0 360 40t360-20 360 30 360-10v80H0z" fill="#1E3A34" />
         </svg>
       </div>

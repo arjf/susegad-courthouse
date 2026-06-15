@@ -34,7 +34,7 @@ export default function Home() {
       </div>
 
       <AnimateIn direction="up">
-        <section id="about" className="bg-secondary py-24">
+        <section id="about" className="bg-secondary py-12 md:py-24">
           <div className="mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-3xl text-center">
               <span className="font-body text-sm font-medium uppercase tracking-widest text-accent1">
@@ -73,9 +73,9 @@ export default function Home() {
       </AnimateIn>
 
       <AnimateIn direction="up" delay={0.1}>
-        <section id="stay" className="bg-primary/5 py-24">
+        <section id="stay" className="bg-primary/5 py-12 md:py-24">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="mb-12 text-center">
+            <div className="mb-8 text-center md:mb-12">
               <span className="font-body text-sm font-medium uppercase tracking-widest text-accent1">
                 Stay
               </span>
@@ -88,7 +88,7 @@ export default function Home() {
                 and a garden view of protected greenery.
               </p>
             </div>
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
               {siteConfig.rooms.map((room, i) => (
                 <RoomCard
                   key={room.title}
@@ -108,9 +108,9 @@ export default function Home() {
       </AnimateIn>
 
       <AnimateIn direction="up" delay={0.1}>
-        <section id="experiences" className="bg-secondary py-24">
+        <section id="experiences" className="bg-secondary py-12 md:py-24">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="mb-12 text-center">
+            <div className="mb-8 text-center md:mb-12">
               <span className="font-body text-sm font-medium uppercase tracking-widest text-accent1">
                 Experiences
               </span>
@@ -122,7 +122,7 @@ export default function Home() {
                 yoga in the garden. Curated experiences, zero fluff.
               </p>
             </div>
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-4">
               {siteConfig.experiences.map((exp, i) => (
                 <ExperienceCard
                   key={exp.title}
@@ -142,9 +142,9 @@ export default function Home() {
       </AnimateIn>
 
       <AnimateIn direction="up" delay={0.1}>
-        <section id="gallery" className="bg-primary/5 py-24">
+        <section id="gallery" className="bg-primary/5 py-12 md:py-24">
           <div className="mx-auto max-w-7xl px-6">
-            <div className="mb-12 text-center">
+            <div className="mb-8 text-center md:mb-12">
               <span className="font-body text-sm font-medium uppercase tracking-widest text-accent1">
                 Gallery
               </span>
@@ -158,7 +158,7 @@ export default function Home() {
       </AnimateIn>
 
       <AnimateIn direction="up">
-        <section id="reviews" className="bg-secondary py-24">
+        <section id="reviews" className="bg-secondary py-12 md:py-24">
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center">
               <span className="font-body text-sm font-medium uppercase tracking-widest text-accent1">

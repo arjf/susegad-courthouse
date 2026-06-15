@@ -105,9 +105,9 @@ export default function MapSection({ compact }: MapSectionProps) {
   }
 
   return (
-    <section id="map" className="bg-primary/5 py-24">
+    <section id="map" className="bg-primary/5 py-12 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 text-center">
+        <div className="mb-8 text-center md:mb-12">
           <span className="font-body text-sm font-medium uppercase tracking-widest text-accent1">
             Location
           </span>
