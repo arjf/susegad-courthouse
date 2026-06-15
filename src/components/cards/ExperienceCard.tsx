@@ -13,16 +13,29 @@ interface ExperienceCardProps {
   price: number;
   tag: string;
   index?: number;
+  symbol?: string;
+  rate?: number;
 }
 
-export default function ExperienceCard({ image, title, duration, price, tag, index = 0 }: ExperienceCardProps) {
+export default function ExperienceCard({
+  image,
+  title,
+  duration,
+  price,
+  tag,
+  index = 0,
+  symbol = "₹",
+  rate = 1,
+}: ExperienceCardProps) {
+  const displayPrice =
+    price === 0 ? "Free" : `${symbol}${Math.round(price * rate).toLocaleString("en-US")}`;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView="visible"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
       whileHover={{ y: -6 }}
     >
       <Card className="group relative h-full overflow-hidden border-0">
@@ -47,7 +60,7 @@ export default function ExperienceCard({ image, title, duration, price, tag, ind
               <Clock size={14} />
               {duration}
             </span>
-            <span className="font-heading text-lg font-bold text-accent1">₹{price}</span>
+            <span className="font-heading text-lg font-bold text-accent1">{displayPrice}</span>
           </div>
           <div className="mt-4">
             <PrimaryButton text="Explore" variant="accent1" size="sm" />

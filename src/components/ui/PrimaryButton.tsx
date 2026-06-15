@@ -10,6 +10,7 @@ interface PrimaryButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
+  href?: string;
 }
 
 const variantStyles: Record<string, string> = {
@@ -28,7 +29,7 @@ export default function PrimaryButton({
 }: PrimaryButtonProps) {
   return (
     <Button
-      className={cn(variantStyles[variant], "font-body tracking-wide", className)}
+      className={cn(variantStyles[variant], "font-body tracking-wide rounded-full", className)}
       size={size === "lg" ? "lg" : size === "sm" ? "sm" : "default"}
       onClick={onClick}
       disabled={disabled}
