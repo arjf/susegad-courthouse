@@ -16,7 +16,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "The Susegad Courtyard | Heritage Home & Peaceful Escape in Goa",
-  description: "Experience the art of Susegad living at our heritage courtyard home in Goa. Authentic Goan hospitality, peaceful stays, and unforgettable experiences.",
+  description:
+    "Experience the art of Susegad living at our heritage courtyard home in Goa. Authentic Goan hospitality, peaceful stays, and unforgettable experiences.",
 };
 
 export default function RootLayout({
@@ -29,7 +30,9 @@ export default function RootLayout({
       lang="en"
       className={`${playfairDisplay.variable} ${poppins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-secondary text-primary">{children}</body>
+      <body className="min-h-full min-w-full flex flex-col bg-secondary text-primary">
+        {children}
+      </body>
     </html>
   );
 }

@@ -11,7 +11,9 @@ import ImageGallery from "@/components/sections/ImageGallery";
 import TestimonialSlider from "@/components/sections/TestimonialSlider";
 import dynamic from "next/dynamic";
 
-const MapSection = dynamic(() => import("@/components/sections/MapSection"), { ssr: false });
+const MapSection = dynamic(() => import("@/components/sections/MapSection"), {
+  ssr: false,
+});
 import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/widgets/WhatsAppFloat";
 import RegionToggle from "@/components/widgets/RegionToggle";
@@ -19,18 +21,24 @@ import AnimateIn from "@/components/ui/AnimateIn";
 
 export default function Home() {
   const [currency, setCurrency] = useState(siteConfig.pricing.defaultRegion);
-  const rate = siteConfig.pricing.rates[currency as keyof typeof siteConfig.pricing.rates]?.rate || 1;
-  const symbol = siteConfig.pricing.rates[currency as keyof typeof siteConfig.pricing.rates]?.symbol || "₹";
+  const rate =
+    siteConfig.pricing.rates[currency as keyof typeof siteConfig.pricing.rates]
+      ?.rate || 1;
+  const symbol =
+    siteConfig.pricing.rates[currency as keyof typeof siteConfig.pricing.rates]
+      ?.symbol || "₹";
 
   return (
     <>
       <NavBar externalLinks={siteConfig.nav.external} />
       <FloatingNav />
       <HeroSection />
-
       {/* Region toggle */}
-      <div className="fixed top-20 right-6 z-40 hidden md:block">
-        <RegionToggle onCurrencyChange={setCurrency} currentCurrency={currency} />
+      <div className="fixed top-20 right-6 z-1000 hidden md:block">
+        <RegionToggle
+          onCurrencyChange={setCurrency}
+          currentCurrency={currency}
+        />
       </div>
 
       <AnimateIn direction="up">
@@ -44,27 +52,43 @@ export default function Home() {
                 {siteConfig.tagline}
               </h2>
               <p className="mt-6 font-body text-lg leading-relaxed text-primary/70">
-                A modest standalone home, five minutes from Anjuna Beach, tucked behind an
-                inward walkway with a private gate. Surrounded by nature-preserved plots,
-                our courtyard house offers the space and solitude Goa is meant for. No
-                resort frills — just a stocked kitchen, reliable WiFi, a washing machine,
-                and the freedom to live at your own pace.
+                A modest standalone home, five minutes from Anjuna Beach, tucked
+                behind an inward walkway with a private gate. Surrounded by
+                nature-preserved plots, our courtyard house offers the space and
+                solitude Goa is meant for. No resort frills — just a stocked
+                kitchen, reliable WiFi, a washing machine, and the freedom to
+                live at your own pace.
               </p>
               <p className="mt-4 font-body text-base leading-relaxed text-primary/60">
-                <em>Self-catered stay. No breakfast, cleaning, or food delivery services.</em>
+                <em>
+                  Self-catered stay. No breakfast, cleaning, or food delivery
+                  services.
+                </em>
               </p>
               <div className="mt-8 grid grid-cols-3 gap-8 border-t border-border pt-8">
                 <div>
-                  <p className="font-heading text-3xl font-bold text-accent1">{siteConfig.property.bedrooms}</p>
-                  <p className="mt-1 font-body text-sm text-primary/60">Bedrooms</p>
+                  <p className="font-heading text-3xl font-bold text-accent1">
+                    {siteConfig.property.bedrooms}
+                  </p>
+                  <p className="mt-1 font-body text-sm text-primary/60">
+                    Bedrooms
+                  </p>
                 </div>
                 <div>
-                  <p className="font-heading text-3xl font-bold text-accent1">{siteConfig.property.minAnjunaBeach.split(" ")[0]} min</p>
-                  <p className="mt-1 font-body text-sm text-primary/60">Anjuna Beach</p>
+                  <p className="font-heading text-3xl font-bold text-accent1">
+                    {siteConfig.property.minAnjunaBeach.split(" ")[0]} min
+                  </p>
+                  <p className="mt-1 font-body text-sm text-primary/60">
+                    Anjuna Beach
+                  </p>
                 </div>
                 <div>
-                  <p className="font-heading text-3xl font-bold text-accent1">{siteConfig.property.rating}</p>
-                  <p className="mt-1 font-body text-sm text-primary/60">{siteConfig.property.reviewCount} Reviews</p>
+                  <p className="font-heading text-3xl font-bold text-accent1">
+                    {siteConfig.property.rating}
+                  </p>
+                  <p className="mt-1 font-body text-sm text-primary/60">
+                    {siteConfig.property.reviewCount} Reviews
+                  </p>
                 </div>
               </div>
             </div>
@@ -83,9 +107,9 @@ export default function Home() {
                 Your Home in Goa
               </h2>
               <p className="mx-auto mt-4 max-w-2xl font-body text-lg text-primary/70">
-                Book the entire home or a single room on Airbnb. Everything you need,
-                nothing you don&apos;t. Stocked kitchen, fast WiFi, washing machine,
-                and a garden view of protected greenery.
+                Book the entire home or a single room on Airbnb. Everything you
+                need, nothing you don&apos;t. Stocked kitchen, fast WiFi,
+                washing machine, and a garden view of protected greenery.
               </p>
             </div>
             <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -118,8 +142,9 @@ export default function Home() {
                 Discover Goa Your Way
               </h2>
               <p className="mx-auto mt-4 max-w-2xl font-body text-lg text-primary/70">
-                Walk to Anjuna Beach, cook local recipes, explore spice plantations, or do
-                yoga in the garden. Curated experiences, zero fluff.
+                Walk to Anjuna Beach, cook local recipes, explore spice
+                plantations, or do yoga in the garden. Curated experiences, zero
+                fluff.
               </p>
             </div>
             <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -168,7 +193,10 @@ export default function Home() {
                 Loved by Travelers
               </h2>
             </div>
-            <TestimonialSlider reviews={siteConfig.testimonials} autoPlay={true} />
+            <TestimonialSlider
+              reviews={siteConfig.testimonials}
+              autoPlay={true}
+            />
           </div>
         </section>
       </AnimateIn>

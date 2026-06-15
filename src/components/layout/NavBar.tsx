@@ -32,10 +32,10 @@ export default function NavBar({ externalLinks }: NavBarProps) {
         isScrolled
           ? "bg-secondary/95 backdrop-blur-sm shadow-sm"
           : "bg-transparent",
-        "border-b border-border/40"
+        "border-b border-border/40",
       )}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
+      <nav className="mx-auto flex max-w-dvw items-center justify-between px-6 py-3">
         <Link href="/" className="font-heading text-2xl font-bold text-primary">
           {siteConfig.name.split(" ").slice(-1)[0]}
         </Link>
@@ -64,7 +64,11 @@ export default function NavBar({ externalLinks }: NavBarProps) {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.3 }}
         >
-          <a href={siteConfig.booking.airbnbUrl} target="_blank" rel="noopener noreferrer">
+          <a
+            href={siteConfig.booking.airbnbUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <PrimaryButton text="Book on Airbnb" variant="accent1" size="sm" />
           </a>
         </motion.div>
@@ -104,8 +108,16 @@ export default function NavBar({ externalLinks }: NavBarProps) {
                 </li>
               ))}
               <li>
-                <a href={siteConfig.booking.airbnbUrl} target="_blank" rel="noopener noreferrer">
-                  <PrimaryButton text="Book on Airbnb" variant="accent1" size="default" />
+                <a
+                  href={siteConfig.booking.airbnbUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <PrimaryButton
+                    text="Book on Airbnb"
+                    variant="accent1"
+                    size="default"
+                  />
                 </a>
               </li>
             </ul>
