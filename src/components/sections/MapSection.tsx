@@ -89,7 +89,7 @@ export default function MapSection({ compact }: MapSectionProps) {
     return (
       <div className="w-full">
         <div className="overflow-hidden rounded-2xl shadow-lg">
-          <div ref={mapRef} className="h-[250px] w-full sm:h-[300px]" />
+          <div ref={mapRef} className="h-[180px] w-full sm:h-[250px] md:h-[300px]" />
         </div>
         <a
           href={mapsUrl}

@@ -19,6 +19,8 @@ const variantStyles: Record<string, string> = {
   outline: "border-accent1 text-accent1 bg-transparent hover:bg-accent1/10",
 };
 
+const sizeMap: Record<string, "sm" | "default" | "lg"> = { sm: "sm", default: "default", lg: "lg" };
+
 export default function PrimaryButton({
   text,
   variant = "accent1",
@@ -26,11 +28,30 @@ export default function PrimaryButton({
   onClick,
   disabled = false,
   className,
+  href,
 }: PrimaryButtonProps) {
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          variantStyles[variant],
+          "font-body tracking-wide rounded-full inline-flex shrink-0 items-center justify-center border transition-all select-none",
+          size === "lg" ? "h-9 px-2.5 text-sm" : size === "sm" ? "h-7 px-2.5 text-[0.8rem]" : "h-8 px-2.5 text-sm",
+          className
+        )}
+      >
+        {text}
+      </a>
+    );
+  }
+
   return (
     <Button
       className={cn(variantStyles[variant], "font-body tracking-wide rounded-full", className)}
-      size={size === "lg" ? "lg" : size === "sm" ? "sm" : "default"}
+      size={sizeMap[size]}
       onClick={onClick}
       disabled={disabled}
     >

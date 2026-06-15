@@ -42,10 +42,10 @@ export default function HeroSection() {
         </svg>
       </div>
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col md:flex-row">
+      <div className="relative mx-auto flex min-h-[90svh] max-w-7xl flex-col md:flex-row">
         {/* Left: text + stats */}
         <motion.div
-          className="flex flex-1 flex-col justify-center px-6 pt-28 pb-6 md:px-12 md:pb-0 lg:px-16"
+          className="flex flex-1 flex-col justify-center px-6 pt-20 pb-4 md:px-12 md:pb-0 lg:px-16"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -58,7 +58,7 @@ export default function HeroSection() {
           </motion.span>
           <motion.h1
             variants={itemVariants}
-            className="mt-3 font-heading text-4xl font-bold leading-tight text-primary md:text-5xl lg:text-6xl lg:leading-[1.1]"
+            className="mt-2 font-heading text-3xl font-bold leading-tight text-primary md:text-5xl lg:text-6xl lg:leading-[1.1]"
           >
             A Heritage Home.
             <br />
@@ -68,43 +68,41 @@ export default function HeroSection() {
           </motion.h1>
           <motion.p
             variants={itemVariants}
-            className="mt-4 max-w-lg font-body text-base leading-relaxed text-primary/70 md:text-lg"
+            className="mt-3 max-w-lg font-body text-sm leading-relaxed text-primary/70 md:text-lg"
           >
             Five minutes from Anjuna Beach. A private standalone home surrounded by preserved greenery.
             Stocked kitchen, fast WiFi, washing machine — live Goa at your own pace.
           </motion.p>
-          <motion.div variants={itemVariants} className="mt-6 flex flex-wrap gap-3">
-            <a href={siteConfig.booking.airbnbUrl} target="_blank" rel="noopener noreferrer">
-              <PrimaryButton text="Book on Airbnb" variant="accent1" size="lg" />
-            </a>
+          <motion.div variants={itemVariants} className="mt-4 flex flex-wrap gap-2">
+            <PrimaryButton text="Book on Airbnb" variant="accent1" size="lg" href={siteConfig.booking.airbnbUrl} />
             <PrimaryButton text="View Experiences" variant="outline" size="lg" />
           </motion.div>
 
           {/* Quick stats */}
           <motion.div
             variants={itemVariants}
-            className="mt-8 flex items-center gap-6 border-t border-border pt-6"
+            className="mt-5 flex items-center gap-4 border-t border-border pt-4"
           >
             <div className="text-center">
-              <p className="font-heading text-xl font-bold text-primary">{siteConfig.property.bedrooms}</p>
-              <p className="font-body text-xs text-primary/60">Bedrooms</p>
+              <p className="font-heading text-lg font-bold text-primary">{siteConfig.property.bedrooms}</p>
+              <p className="font-body text-[11px] text-primary/60">Bedrooms</p>
             </div>
-            <div className="h-8 w-px bg-border" />
+            <div className="h-6 w-px bg-border" />
             <div className="text-center">
-              <p className="font-heading text-xl font-bold text-primary">{siteConfig.property.minAnjunaBeach.split(" ")[0]} min</p>
-              <p className="font-body text-xs text-primary/60">Anjuna Beach</p>
+              <p className="font-heading text-lg font-bold text-primary">{siteConfig.property.minAnjunaBeach.split(" ")[0]} min</p>
+              <p className="font-body text-[11px] text-primary/60">Anjuna Beach</p>
             </div>
-            <div className="h-8 w-px bg-border" />
+            <div className="h-6 w-px bg-border" />
             <div className="text-center">
-              <p className="font-heading text-xl font-bold text-primary">{siteConfig.property.rating}</p>
-              <p className="font-body text-xs text-primary/60">{siteConfig.property.reviewCount} reviews</p>
+              <p className="font-heading text-lg font-bold text-primary">{siteConfig.property.rating}</p>
+              <p className="font-body text-[11px] text-primary/60">{siteConfig.property.reviewCount} reviews</p>
             </div>
           </motion.div>
         </motion.div>
 
         {/* Right: interactive map + availability */}
         <motion.div
-          className="flex flex-1 flex-col justify-center gap-4 px-6 pb-12 md:px-12 md:pb-0 lg:px-16"
+          className="flex flex-1 flex-col justify-center gap-3 px-6 pb-8 md:px-12 md:pb-0 lg:px-16"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}

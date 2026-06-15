@@ -42,10 +42,10 @@ export default function AvailabilityCalendar() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6, duration: 0.5 }}
-      className="rounded-2xl border border-border bg-white/60 p-4 backdrop-blur-sm"
+      className="rounded-2xl border border-border bg-white/60 p-3 backdrop-blur-sm sm:p-4"
     >
-      <div className="mb-3 flex items-center justify-between">
-        <h4 className="font-heading text-sm font-semibold text-primary">
+      <div className="mb-2 flex items-center justify-between sm:mb-3">
+        <h4 className="font-heading text-xs font-semibold text-primary sm:text-sm">
           {monthNames[month]} {year}
         </h4>
         <a
@@ -58,11 +58,11 @@ export default function AvailabilityCalendar() {
         </a>
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-[2px] sm:gap-1">
         {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
           <span
             key={d}
-            className="text-center font-body text-[10px] font-medium text-muted-foreground"
+            className="text-center font-body text-[9px] font-medium text-muted-foreground sm:text-[10px]"
           >
             {d}
           </span>
@@ -81,7 +81,7 @@ export default function AvailabilityCalendar() {
           return (
             <div
               key={day}
-              className={`flex aspect-square items-center justify-center rounded-full font-body text-[11px] transition-colors ${
+              className={`flex aspect-square items-center justify-center rounded-full font-body text-[10px] transition-colors sm:text-[11px] ${
                 isPast
                   ? "text-muted-foreground/30"
                   : available
@@ -96,18 +96,18 @@ export default function AvailabilityCalendar() {
         })}
       </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-border pt-2">
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1 font-body text-[10px] text-muted-foreground">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-100 border border-green-300" />
+      <div className="mt-2 flex flex-col gap-1 border-t border-border pt-2 sm:mt-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="flex items-center gap-1 font-body text-[9px] text-muted-foreground sm:text-[10px]">
+            <span className="inline-block h-2 w-2 rounded-full bg-green-100 border border-green-300 sm:h-2.5 sm:w-2.5" />
             Available
           </span>
-          <span className="flex items-center gap-1 font-body text-[10px] text-muted-foreground">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-100 border border-red-300" />
+          <span className="flex items-center gap-1 font-body text-[9px] text-muted-foreground sm:text-[10px]">
+            <span className="inline-block h-2 w-2 rounded-full bg-red-100 border border-red-300 sm:h-2.5 sm:w-2.5" />
             Likely booked
           </span>
         </div>
-        <span className="font-body text-[10px] text-muted-foreground">
+        <span className="font-body text-[9px] text-muted-foreground sm:text-[10px]">
           *Estimated from Airbnb data
         </span>
       </div>
