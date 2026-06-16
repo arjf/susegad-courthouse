@@ -16,7 +16,7 @@ export default function WhatsAppFloat({ phoneNumber, message }: WhatsAppFloatPro
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-accent1 text-primary-foreground shadow-lg"
+      className="fixed bottom-24 md:bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-accent1 text-primary-foreground shadow-lg"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       animate={{ scale: [1, 1.05, 1] }}

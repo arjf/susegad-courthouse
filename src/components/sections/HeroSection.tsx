@@ -85,10 +85,10 @@ export default function HeroSection() {
         </svg>
       </div>
 
-      <div className="relative mx-auto flex max-w-7xl flex-col md:flex-row">
+      <div className="relative mx-auto flex min-h-[85vh] max-w-7xl flex-col md:flex-row">
         {/* Left: text + stats */}
         <motion.div
-          className="flex flex-auto md:flex-1 flex-col justify-center px-6 pt-20 pb-4 md:px-12 md:pb-0 lg:px-16"
+          className="flex flex-auto md:flex-1 flex-col justify-center px-6 pt-24 pb-8 md:px-12 md:pt-32 md:pb-16 lg:px-16"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -167,7 +167,7 @@ export default function HeroSection() {
 
         {/* Right: interactive map + availability */}
         <motion.div
-          className="flex z-0 flex-auto md:flex-1 flex-col justify-center gap-2 px-6 pb-6 md:px-12 md:pb-0 lg:px-16"
+          className="flex z-0 flex-auto md:flex-1 flex-col justify-center gap-4 px-6 pb-12 md:px-12 md:pb-16 md:pt-32 lg:px-16"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
