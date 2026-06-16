@@ -156,7 +156,7 @@ export const siteConfig = {
   nav: {
     external: [
       { label: "About Us", href: "/about" },
-      { label: "Blog", href: "/blog" },
+      { label: "Explore", href: "/explore" },
       { label: "Contact", href: "/contact" },
     ],
     sections: [

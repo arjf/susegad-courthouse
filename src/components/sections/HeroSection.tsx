@@ -116,22 +116,17 @@ export default function HeroSection() {
             by preserved greenery. Stocked kitchen, fast WiFi, washing machine —
             live Goa at your own pace.
           </motion.p>
-          <motion.div
-            variants={itemVariants}
-            className="mt-3 flex flex-wrap gap-2"
-          >
-            <PrimaryButton
-              text="Book on Airbnb"
-              variant="accent1"
-              size="lg"
-              href={siteConfig.booking.airbnbUrl}
-            />
-            <PrimaryButton
-              text="View Experiences"
-              variant="outline"
-              size="lg"
-            />
-          </motion.div>
+           <motion.div
+             variants={itemVariants}
+             className="mt-3 flex flex-wrap gap-2"
+           >
+             <PrimaryButton
+               text="Book on Airbnb"
+               variant="accent1"
+               size="lg"
+               href={siteConfig.booking.airbnbUrl}
+             />
+           </motion.div>
 
           {/* Quick stats */}
           <motion.div
