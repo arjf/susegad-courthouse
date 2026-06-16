@@ -35,7 +35,7 @@ export default function NavBar({ externalLinks }: NavBarProps) {
         "border-b border-border/40",
       )}
     >
-      <nav className="mx-auto flex max-w-dvw items-center justify-between px-6 py-3">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link href="/" className="font-heading text-2xl font-bold text-primary">
           {siteConfig.name.split(" ").slice(-1)[0]}
         </Link>

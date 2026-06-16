@@ -85,7 +85,7 @@ export default function HeroSection() {
         </svg>
       </div>
 
-      <div className="relative mx-auto flex max-w-[90dvw] flex-col md:flex-row">
+      <div className="relative mx-auto flex max-w-7xl flex-col md:flex-row">
         {/* Left: text + stats */}
         <motion.div
           className="flex flex-auto md:flex-1 flex-col justify-center px-6 pt-20 pb-4 md:px-12 md:pb-0 lg:px-16"
