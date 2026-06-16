@@ -8,7 +8,18 @@ import AnimateIn from "@/components/ui/AnimateIn";
 import Image from "next/image";
 import { MapPin, Star, Clock, Utensils, History, Waves } from "lucide-react";
 
-const guideData = {
+interface GuidePlace {
+  name: string;
+  description: string;
+  highlights: string[];
+  image: string;
+  rating?: string;
+  category?: string;
+  hours?: string;
+  price?: string;
+}
+
+const guideData: Record<string, { title: string; icon: React.ReactNode; places: GuidePlace[] }> = {
   beaches: {
     title: "Pristine Beaches",
     icon: <Waves className="text-accent1" size={24} />,
