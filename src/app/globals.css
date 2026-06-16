@@ -125,10 +125,10 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-secondary text-primary font-body;
+    @apply bg-secondary text-primary font-body overflow-x-hidden w-full;
   }
   html {
-    @apply font-body;
+    @apply font-body overflow-x-hidden w-full;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
