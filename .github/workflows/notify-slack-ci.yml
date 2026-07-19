@@ -1,0 +1,53 @@
+name: Notify CI Result
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - name: Post CI result to Slack
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: C0BJ3LGR14K
+        run: |
+          STATUS="${{ github.event.workflow_run.conclusion }}"
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          COMMIT_MSG=$(echo "${{ github.event.workflow_run.head_commit.message }}" | head -1)
+          RUN_URL="https://github.com/arjf/susegad-courthouse/actions/runs/${{ github.event.workflow_run.id }}"
+
+          if [ "$STATUS" = "success" ]; then
+            EMOJI=":white_check_mark:"
+            LABEL="Passed"
+          elif [ "$STATUS" = "failure" ]; then
+            EMOJI=":x:"
+            LABEL="Failed"
+          else
+            EMOJI=":warning:"
+            LABEL="$STATUS"
+          fi
+
+          curl -s -X POST \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            https://slack.com/api/chat.postMessage \
+            -d "$(cat <<EOF
+          {
+            "channel": "$SLACK_CHANNEL",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "${EMOJI} *CI ${LABEL}* on \`${BRANCH}\`\n<${RUN_URL}|View run> — ${COMMIT_MSG}"
+                }
+              }
+            ],
+            "text": "CI ${LABEL} on ${BRANCH}: ${COMMIT_MSG}"
+          }
+          EOF
+          )"

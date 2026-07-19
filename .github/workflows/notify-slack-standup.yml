@@ -1,0 +1,56 @@
+name: Daily Standup
+
+on:
+  schedule:
+    # 8:00 AM IST (2:30 AM UTC), offset from metrics by 15 min
+    - cron: '45 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  standup:
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Collect and post standup
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: C0BK4GCHGNL
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TODAY=$(date -u -d "yesterday" +"%Y-%m-%d")
+
+          # Commits in last 24h
+          COMMITS=$(git log --since="$TODAY" --oneline --no-merges 2>/dev/null || echo "None")
+          COMMIT_COUNT=$(echo "$COMMITS" | grep -c . || echo 0)
+          COMMIT_LINES=$(echo "$COMMITS" | head -5)
+
+          # Open PRs
+          PR_COUNT=$(gh pr list --repo arjf/susegad-courthouse --state open --limit 10 --json number,title,author 2>/dev/null || echo "[]")
+          PR_LINES=$(echo "$PR_COUNT" | nix-shell -p python3 --run "python3 -c 'import json,sys; prs=json.load(sys.stdin); [print(f\"  <https://github.com/arjf/susegad-courthouse/pull/{p[\"number\"]}|#{p[\"number\"]}> {p[\"title\"]} — {p[\"author\"][\"login\"]}\") for p in prs]'")
+
+          # Last deploy
+          LAST_DEPLOY=$(gh api repos/arjf/susegad-courthouse/deployments --jq '.[0].created_at // "none"' 2>/dev/null || echo "unknown")
+
+          curl -s -X POST \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            https://slack.com/api/chat.postMessage \
+            -d "$(cat <<EOF
+          {
+            "channel": "$SLACK_CHANNEL",
+            "blocks": [
+              {"type":"header","text":{"type":"plain_text","text":"☀️ Daily Standup — Susegad Courthouse"}},
+              {"type":"section","text":{"type":"mrkdwn","text":"*Date:* $(date -u +"%A, %B %d, %Y")"}},
+              {"type":"divider"},
+              {"type":"section","text":{"type":"mrkdwn","text":"*🔨 Recent commits (${COMMIT_COUNT})*\n${COMMIT_LINES:-None}"}},
+              {"type":"section","text":{"type":"mrkdwn","text":"*🔀 Open PRs*\n${PR_LINES:-None}"}},
+              {"type":"section","text":{"type":"mrkdwn","text":"*🚀 Last deploy:* ${LAST_DEPLOY}"}}
+            ],
+            "text": "Daily Standup — Susegad Courthouse"
+          }
+          EOF
+          )"
