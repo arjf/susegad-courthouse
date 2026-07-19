@@ -1,0 +1,42 @@
+name: Notify Slack on Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - name: Post commit to Slack
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: C0BJ6K81D8D
+        run: |
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -1)
+          COMMIT_URL="${{ github.event.head_commit.url }}"
+          COMMITTER="${{ github.event.head_commit.author.name }}"
+          BRANCH="${{ github.ref_name }}"
+          SHA=$(echo "${{ github.sha }}" | head -c 7)
+
+          curl -s -X POST \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            https://slack.com/api/chat.postMessage \
+            -d "$(cat <<EOF
+          {
+            "channel": "$SLACK_CHANNEL",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "🚀 *New push to main*\n<${COMMIT_URL}|${SHA}> ${COMMIT_MSG}\n_${COMMITTER}_"
+                }
+              }
+            ],
+            "text": "New push to main: ${COMMIT_MSG}"
+          }
+          EOF
+          )"
