@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { siteConfig } from "@/lib/config";
 import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
@@ -15,6 +16,21 @@ const MapSection = dynamic(() => import("@/components/sections/MapSection"), {
 });
 
 export default function ContactPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(
+      `Website enquiry from ${name || "a guest"}`
+    );
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\n${message}`
+    );
+    window.location.href = `mailto:${siteConfig.contact.email}?subject=${subject}&body=${body}`;
+  };
+
   return (
     <>
       <NavBar externalLinks={siteConfig.nav.external} />
@@ -38,7 +54,7 @@ export default function ContactPage() {
             <div className="grid gap-12 md:grid-cols-2 lg:gap-16">
               {/* Contact Form */}
               <div className="rounded-2xl border border-border bg-white p-6 shadow-sm sm:p-8">
-                <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+                <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                   <div>
                     <label htmlFor="name" className="mb-2 block font-body text-sm font-medium text-primary">
                       Name
@@ -46,6 +62,9 @@ export default function ContactPage() {
                     <input
                       type="text"
                       id="name"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="w-full rounded-lg border border-border bg-transparent px-4 py-3 font-body text-sm text-primary placeholder:text-primary/40 focus:border-accent1 focus:outline-none focus:ring-1 focus:ring-accent1"
                       placeholder="Your full name"
                     />
@@ -57,6 +76,9 @@ export default function ContactPage() {
                     <input
                       type="email"
                       id="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full rounded-lg border border-border bg-transparent px-4 py-3 font-body text-sm text-primary placeholder:text-primary/40 focus:border-accent1 focus:outline-none focus:ring-1 focus:ring-accent1"
                       placeholder="you@example.com"
                     />
@@ -68,11 +90,14 @@ export default function ContactPage() {
                     <textarea
                       id="message"
                       rows={5}
+                      required
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
                       className="w-full rounded-lg border border-border bg-transparent px-4 py-3 font-body text-sm text-primary placeholder:text-primary/40 focus:border-accent1 focus:outline-none focus:ring-1 focus:ring-accent1"
                       placeholder="How can we help you?"
                     ></textarea>
                   </div>
-                  <PrimaryButton text="Send Message" size="lg" className="w-full" />
+                  <PrimaryButton text="Send Message" size="lg" type="submit" className="w-full" />
                 </form>
               </div>
 
@@ -123,25 +148,7 @@ export default function ContactPage() {
         <MapSection />
       </div>
 
-      <Footer
-        links={[
-          { label: "Home", href: "/" },
-          { label: "About Us", href: "/about" },
-          { label: "Blog", href: "/blog" },
-          { label: "Contact", href: "/contact" },
-        ]}
-        socialLinks={[
-          { platform: "facebook", href: siteConfig.social.facebook },
-          { platform: "instagram", href: siteConfig.social.instagram },
-          { platform: "youtube", href: siteConfig.social.youtube },
-          { platform: "whatsapp", href: siteConfig.social.whatsapp },
-        ]}
-        logo={
-          <span className="font-heading text-2xl font-bold text-primary-foreground">
-            {siteConfig.name.split(" ").slice(-1)[0]}
-          </span>
-        }
-      />
+      <Footer />
       <WhatsAppFloat
         phoneNumber={siteConfig.social.whatsappNumber}
         message={siteConfig.social.whatsappMessage}

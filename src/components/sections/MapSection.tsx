@@ -27,7 +27,8 @@ export default function MapSection({ compact }: MapSectionProps) {
 
   useEffect(() => {
     if (mapRef.current && !mapInstance.current) {
-      const map = L.map(mapRef.current, {
+      const container = mapRef.current;
+      const map = L.map(container, {
         zoomControl: false,
         scrollWheelZoom: false,
       });
@@ -72,10 +73,22 @@ export default function MapSection({ compact }: MapSectionProps) {
 
       mapInstance.current = map;
 
-      // Re-enable scroll after user interaction
-      map.scrollWheelZoom.enable();
+      // Enable scroll-zoom only once the user focuses the map, so the page
+      // keeps scrolling normally until the map is intentionally engaged.
+      const enableScroll = () => {
+        map.scrollWheelZoom.enable();
+        container.removeEventListener("click", enableScroll);
+        container.removeEventListener("focus", enableScroll);
+        container.removeEventListener("touchstart", enableScroll);
+      };
+      container.addEventListener("click", enableScroll);
+      container.addEventListener("focus", enableScroll);
+      container.addEventListener("touchstart", enableScroll);
 
       return () => {
+        container.removeEventListener("click", enableScroll);
+        container.removeEventListener("focus", enableScroll);
+        container.removeEventListener("touchstart", enableScroll);
         map.remove();
         mapInstance.current = null;
       };

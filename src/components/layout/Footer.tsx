@@ -1,10 +1,11 @@
 import { Globe, MessageCircle, Camera, Send } from "lucide-react";
 import type { ReactNode } from "react";
+import { siteConfig } from "@/lib/config";
 
 interface FooterProps {
-  links: { label: string; href: string }[];
-  socialLinks: { platform: string; href: string }[];
-  logo: ReactNode;
+  links?: { label: string; href: string }[];
+  socialLinks?: { platform: string; href: string }[];
+  logo?: ReactNode;
 }
 
 const socialIcons: Record<string, ReactNode> = {
@@ -14,13 +15,23 @@ const socialIcons: Record<string, ReactNode> = {
   whatsapp: <MessageCircle size={18} />,
 };
 
-export default function Footer({ links, socialLinks, logo }: FooterProps) {
+export default function Footer({
+  links = siteConfig.footer.links,
+  socialLinks = siteConfig.footer.socialLinks,
+  logo,
+}: FooterProps) {
+  const renderedLogo = logo ?? (
+    <span className="font-heading text-2xl font-bold text-primary-foreground">
+      {siteConfig.name.split(" ").slice(-1)[0]}
+    </span>
+  );
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="mx-auto max-w-7xl px-6 py-16 pb-20">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-2">
-            <div className="mb-4">{logo}</div>
+            <div className="mb-4">{renderedLogo}</div>
             <p className="font-body text-sm leading-relaxed text-primary-foreground/70 max-w-md">
               A heritage standalone home, five minutes from Anjuna Beach. Self-catered stays
               surrounded by nature-preserved greenery. No frills. Just Goa.
@@ -61,7 +72,7 @@ export default function Footer({ links, socialLinks, logo }: FooterProps) {
         </div>
         <div className="mt-12 border-t border-primary-foreground/10 pt-8 text-center">
           <p className="font-body text-xs text-primary-foreground/50">
-            &copy; {new Date().getFullYear()} The Susegad Courtyard. All rights reserved.
+            &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
         </div>
       </div>

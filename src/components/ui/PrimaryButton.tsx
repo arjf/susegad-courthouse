@@ -11,6 +11,8 @@ interface PrimaryButtonProps {
   disabled?: boolean;
   className?: string;
   href?: string;
+  type?: "submit" | "button";
+  ariaLabel?: string;
 }
 
 const variantStyles: Record<string, string> = {
@@ -29,6 +31,8 @@ export default function PrimaryButton({
   disabled = false,
   className,
   href,
+  type = "button",
+  ariaLabel,
 }: PrimaryButtonProps) {
   if (href) {
     return (
@@ -36,6 +40,7 @@ export default function PrimaryButton({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={ariaLabel}
         className={cn(
           variantStyles[variant],
           "font-body tracking-wide rounded-full inline-flex shrink-0 items-center justify-center border transition-all select-none",
@@ -54,6 +59,8 @@ export default function PrimaryButton({
       size={sizeMap[size]}
       onClick={onClick}
       disabled={disabled}
+      type={type}
+      aria-label={ariaLabel}
     >
       {text}
     </Button>

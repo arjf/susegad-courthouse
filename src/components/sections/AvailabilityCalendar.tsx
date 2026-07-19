@@ -1,41 +1,22 @@
 "use client";
 
-import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { siteConfig } from "@/lib/config";
 import { ExternalLink } from "lucide-react";
+
+const monthNames = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
 
 export default function AvailabilityCalendar() {
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth();
+  const todayDate = today.getDate();
 
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  const seededRandom = (day: number) => {
-    const seed = year * 10000 + month * 100 + day;
-    const x = Math.sin(seed) * 10000;
-    return x - Math.floor(x);
-  };
-
-  const availability = useMemo(() => {
-    const map: Record<number, boolean> = {};
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(year, month, day);
-      const dayOfWeek = date.getDay();
-      const r = seededRandom(day);
-      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-      map[day] = isWeekend ? r > 0.4 : r > 0.2;
-    }
-    return map;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, month, daysInMonth]);
-
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-  ];
 
   return (
     <motion.div
@@ -54,7 +35,7 @@ export default function AvailabilityCalendar() {
           rel="noopener noreferrer"
           className="flex items-center gap-1 font-body text-[10px] font-medium text-accent1 transition-colors hover:text-accent1/80"
         >
-          Check on Airbnb <ExternalLink size={10} />
+          Check live availability <ExternalLink size={10} />
         </a>
       </div>
 
@@ -74,21 +55,20 @@ export default function AvailabilityCalendar() {
 
         {Array.from({ length: daysInMonth }).map((_, i) => {
           const day = i + 1;
-          const date = new Date(year, month, day);
-          const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
-          const available = availability[day];
+          const isPast = day < todayDate;
+          const isToday = day === todayDate;
 
           return (
             <div
               key={day}
               className={`flex h-7 w-7 items-center justify-center rounded-full font-body text-[10px] transition-colors sm:h-8 sm:w-8 sm:text-[11px] ${
-                isPast
-                  ? "text-muted-foreground/30"
-                  : available
-                    ? "bg-green-100 text-green-800 font-medium"
-                    : "bg-red-100 text-red-800"
+                isToday
+                  ? "bg-accent1 font-semibold text-primary-foreground"
+                  : isPast
+                    ? "text-muted-foreground/30"
+                    : "text-primary/70"
               }`}
-              title={isPast ? "Past" : available ? "Available" : "Likely booked"}
+              aria-label={isToday ? `Today, ${monthNames[month]} ${day}` : `${monthNames[month]} ${day}`}
             >
               {day}
             </div>
@@ -96,19 +76,13 @@ export default function AvailabilityCalendar() {
         })}
       </div>
 
-      <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-2 border-t border-border pt-1.5 sm:mt-2 sm:pt-2">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1 font-body text-[8px] text-muted-foreground sm:text-[9px]">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-100 border border-green-300 sm:h-2 sm:w-2" />
-            Available
-          </span>
-          <span className="flex items-center gap-1 font-body text-[8px] text-muted-foreground sm:text-[9px]">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-100 border border-red-300 sm:h-2 sm:w-2" />
-            Likely booked
-          </span>
-        </div>
+      <div className="mt-1.5 flex items-center justify-between gap-x-2 border-t border-border pt-1.5 sm:mt-2 sm:pt-2">
+        <span className="flex items-center gap-1 font-body text-[8px] text-muted-foreground sm:text-[9px]">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent1 sm:h-2 sm:w-2" />
+          Today
+        </span>
         <span className="font-body text-[8px] text-muted-foreground sm:text-[9px]">
-          *Estimated
+          Live dates on Airbnb
         </span>
       </div>
     </motion.div>

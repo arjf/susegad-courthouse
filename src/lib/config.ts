@@ -1,5 +1,31 @@
+const social = {
+  instagram: "https://instagram.com/susegadcourtyard",
+  facebook: "https://facebook.com/susegadcourtyard",
+  whatsapp: "https://wa.me/919999999999",
+  whatsappNumber: "919999999999",
+  whatsappMessage: "Hi! I'd like to know more about The Susegad Courtyard.",
+  youtube: "https://youtube.com/@susegadcourtyard",
+  airbnb: "https://airbnb.com/h/susegad-courtyard",
+};
+
+const footerLinks = [
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "Explore", href: "/explore" },
+  { label: "Contact", href: "/contact" },
+];
+
+const footerSocialLinks = [
+  { platform: "facebook", href: social.facebook },
+  { platform: "instagram", href: social.instagram },
+  { platform: "youtube", href: social.youtube },
+  { platform: "whatsapp", href: social.whatsapp },
+];
+
 export const siteConfig = {
   name: "The Susegad Courtyard",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL || "https://susegad-courthouse.vercel.app",
   tagline: "Come as a Guest, Leave as Family",
   description:
     "A heritage standalone home, five minutes from Anjuna Beach. Self-catered stays surrounded by nature-preserved greenery.",
@@ -12,15 +38,7 @@ export const siteConfig = {
     anjunaBeachCoordinates: { lat: 15.576, lng: 73.7403 },
   },
 
-  social: {
-    instagram: "https://instagram.com/susegadcourtyard",
-    facebook: "https://facebook.com/susegadcourtyard",
-    whatsapp: "https://wa.me/919999999999",
-    whatsappNumber: "919999999999",
-    whatsappMessage: "Hi! I'd like to know more about The Susegad Courtyard.",
-    youtube: "https://youtube.com/@susegadcourtyard",
-    airbnb: "https://airbnb.com/h/susegad-courtyard",
-  },
+  social,
 
   booking: {
     airbnbUrl: "https://airbnb.com/h/susegad-courtyard",
@@ -65,7 +83,6 @@ export const siteConfig = {
         "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80",
       title: "Entire Home — The Courtyard House",
       price: 12000,
-      priceUSD: 145,
       capacity: 6,
       amenities: ["WiFi", "Power Backup", "Washing Machine", "Stocked Kitchen", "Fridge", "Private Entrance"],
     },
@@ -74,7 +91,6 @@ export const siteConfig = {
         "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=800&q=80",
       title: "Master Suite — Garden View",
       price: 4500,
-      priceUSD: 54,
       capacity: 2,
       amenities: ["WiFi", "Fridge", "Private Washroom", "Work Desk"],
     },
@@ -83,7 +99,6 @@ export const siteConfig = {
         "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
       title: "Standard Room — Courtyard Side",
       price: 3500,
-      priceUSD: 42,
       capacity: 2,
       amenities: ["WiFi", "Shared Kitchen", "Washroom", "Furnished"],
     },
@@ -167,6 +182,11 @@ export const siteConfig = {
       { label: "Reviews", href: "#reviews", icon: "Star" },
       { label: "Map", href: "#map", icon: "MapPin" },
     ],
+  },
+
+  footer: {
+    links: footerLinks,
+    socialLinks: footerSocialLinks,
   },
 };
 

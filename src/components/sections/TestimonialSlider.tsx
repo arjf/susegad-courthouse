@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import type { Testimonial } from "@/lib/types";
 import {
@@ -8,6 +9,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
@@ -16,7 +18,20 @@ interface TestimonialSliderProps {
   autoPlay: boolean;
 }
 
-export default function TestimonialSlider({ reviews, autoPlay }: TestimonialSliderProps) {
+export default function TestimonialSlider({
+  reviews,
+  autoPlay,
+}: TestimonialSliderProps) {
+  const [api, setApi] = useState<CarouselApi | null>(null);
+
+  useEffect(() => {
+    if (!autoPlay || !api) return;
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [autoPlay, api]);
+
   if (reviews.length === 0) return null;
 
   return (
@@ -24,8 +39,8 @@ export default function TestimonialSlider({ reviews, autoPlay }: TestimonialSlid
       opts={{
         loop: true,
         align: "center",
-        duration: autoPlay ? 40 : 20,
       }}
+      setApi={setApi}
       className="mx-auto max-w-2xl px-12"
     >
       <CarouselContent>

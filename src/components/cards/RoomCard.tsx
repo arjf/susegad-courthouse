@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Users } from "lucide-react";
+import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import PrimaryButton from "@/components/ui/PrimaryButton";
@@ -15,6 +16,7 @@ interface RoomCardProps {
   index?: number;
   priceLabel?: string;
   symbol?: string;
+  href?: string;
 }
 
 const amenityIcons: Record<string, string> = {
@@ -35,6 +37,7 @@ export default function RoomCard({
   index = 0,
   priceLabel = "/night",
   symbol = "₹",
+  href,
 }: RoomCardProps) {
   return (
     <motion.div
@@ -45,10 +48,12 @@ export default function RoomCard({
       whileHover={{ y: -6 }}
     >
       <Card size="sm" className="group h-full">
-        <div className="aspect-[4/3] overflow-hidden rounded-t-xl">
-          <img
+        <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl">
+          <Image
             src={image}
             alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
@@ -75,7 +80,13 @@ export default function RoomCard({
               {symbol}{price.toLocaleString("en-US")}
               <span className="font-body text-sm font-normal text-muted-foreground">{priceLabel}</span>
             </span>
-            <PrimaryButton text="View Room" variant="outline" size="sm" />
+            <PrimaryButton
+              text="View Room"
+              variant="outline"
+              size="sm"
+              href={href}
+              ariaLabel={`Book ${title} on Airbnb`}
+            />
           </div>
         </CardFooter>
       </Card>

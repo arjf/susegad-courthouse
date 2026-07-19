@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/widgets/WhatsAppFloat";
 import AnimateIn from "@/components/ui/AnimateIn";
 import Image from "next/image";
-import { MapPin, Star, Clock, Utensils, History, Waves } from "lucide-react";
+import { MapPin, Star, Clock, Utensils, History, Waves, Tag } from "lucide-react";
 
 interface GuidePlace {
   name: string;
@@ -32,7 +32,7 @@ const guideData: Record<string, { title: string; icon: React.ReactNode; places: 
           "Dotted with classic beach shacks serving fresh seafood and cold drinks.",
           "Known globally for its stunning sunsets over the Arabian Sea.",
         ],
-        image: "https://images.unsplash.com/photo-1589982437477-67971626a86f?w=800&q=80",
+        image: "https://images.unsplash.com/photo-1495774856032-8b90bbb32b32?w=800&q=80",
       },
       {
         name: "Ozran Beach",
@@ -62,7 +62,7 @@ const guideData: Record<string, { title: string; icon: React.ReactNode; places: 
           "Requires a short, scenic hike to reach the top, appealing to active guests.",
           "Offers sweeping, photogenic views of the surrounding beaches and river.",
         ],
-        image: "https://images.unsplash.com/photo-1626621341717-C77779737094?w=800&q=80",
+        image: "https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=800&q=80",
       },
       {
         name: "Anjuna Flea Market",
@@ -74,7 +74,7 @@ const guideData: Record<string, { title: string; icon: React.ReactNode; places: 
           "Features live music, food stalls, and a lively, colorful atmosphere.",
           "A great place for visitors to practice their bargaining skills.",
         ],
-        image: "https://images.unsplash.com/photo-1533900272598-77339966628e?w=800&q=80",
+        image: "https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=800&q=80",
       },
     ],
   },
@@ -94,7 +94,7 @@ const guideData: Record<string, { title: string; icon: React.ReactNode; places: 
           "Hosts a charming boutique shop offering clothing and unique jewelry.",
           "Features a relaxed, open-air garden setting where guests can unwind for hours.",
         ],
-        image: "https://images.unsplash.com/photo-1554118811-1e0d572d9675?w=800&q=80",
+        image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
       },
       {
         name: "CAFFE SICILY",
@@ -108,7 +108,7 @@ const guideData: Record<string, { title: string; icon: React.ReactNode; places: 
           "Offers a cozy, laid-back environment perfect for a casual lunch or a relaxed dinner.",
           "Highly praised by reviewers for its excellent, welcoming service.",
         ],
-        image: "https://images.unsplash.com/photo-1554118811-1e0d572d9675?w=800&q=80",
+        image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
       },
       {
         name: "Goa's Ark Restaurant",
@@ -185,9 +185,9 @@ export default function ExplorePage() {
                             
                             {(place.category || place.hours || place.price) && (
                               <div className="mb-4 flex flex-wrap gap-2 text-[10px] font-medium uppercase tracking-wider text-primary/50">
-                                {place.category && <span className="flex items-center gap-1">📍 {place.category}</span>}
-                                {place.hours && <span className="flex items-center gap-1">🕒 {place.hours}</span>}
-                                {place.price && <span className="flex items-center gap-1">💰 {place.price}</span>}
+                                {place.category && <span className="flex items-center gap-1"><MapPin size={10} /> {place.category}</span>}
+                                {place.hours && <span className="flex items-center gap-1"><Clock size={10} /> {place.hours}</span>}
+                                {place.price && <span className="flex items-center gap-1"><Tag size={10} /> {place.price}</span>}
                               </div>
                             )}
 
@@ -214,25 +214,7 @@ export default function ExplorePage() {
         </AnimateIn>
       </main>
 
-      <Footer
-        links={[
-          { label: "Home", href: "/" },
-          { label: "About Us", href: "/about" },
-          { label: "Explore", href: "/explore" },
-          { label: "Contact", href: "/contact" },
-        ]}
-        socialLinks={[
-          { platform: "facebook", href: siteConfig.social.facebook },
-          { platform: "instagram", href: siteConfig.social.instagram },
-          { platform: "youtube", href: siteConfig.social.youtube },
-          { platform: "whatsapp", href: siteConfig.social.whatsapp },
-        ]}
-        logo={
-          <span className="font-heading text-2xl font-bold text-primary-foreground">
-            {siteConfig.name.split(" ").slice(-1)[0]}
-          </span>
-        }
-      />
+      <Footer />
       <WhatsAppFloat
         phoneNumber={siteConfig.social.whatsappNumber}
         message={siteConfig.social.whatsappMessage}

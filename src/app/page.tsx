@@ -32,14 +32,8 @@ export default function Home() {
     <>
       <NavBar externalLinks={siteConfig.nav.external} />
       <FloatingNav />
+      <main>
       <HeroSection />
-      {/* Region toggle */}
-      <div className="fixed top-20 right-6 z-1000 hidden md:block">
-        <RegionToggle
-          onCurrencyChange={setCurrency}
-          currentCurrency={currency}
-        />
-      </div>
 
       <AnimateIn direction="up">
         <section id="about" className="bg-secondary py-12 md:py-24">
@@ -111,6 +105,12 @@ export default function Home() {
                 need, nothing you don&apos;t. Stocked kitchen, fast WiFi,
                 washing machine, and a garden view of protected greenery.
               </p>
+              <div className="mt-6 flex justify-center">
+                <RegionToggle
+                  onCurrencyChange={setCurrency}
+                  currentCurrency={currency}
+                />
+              </div>
             </div>
             <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
               {siteConfig.rooms.map((room, i) => (
@@ -118,12 +118,13 @@ export default function Home() {
                   key={room.title}
                   image={room.image}
                   title={room.title}
-                  price={currency === "inr" ? room.price : room.priceUSD}
+                  price={Math.round(room.price * rate)}
                   capacity={room.capacity}
                   amenities={room.amenities}
                   index={i}
-                  priceLabel={currency === "inr" ? "/night" : "/night"}
+                  priceLabel="/night"
                   symbol={symbol}
+                  href={siteConfig.booking.airbnbUrl}
                 />
               ))}
             </div>
@@ -159,6 +160,9 @@ export default function Home() {
                   index={i}
                   symbol={symbol}
                   rate={rate}
+                  href={`https://wa.me/${siteConfig.social.whatsappNumber}?text=${encodeURIComponent(
+                    `Hi! I'm interested in the "${exp.title}" experience at ${siteConfig.name}.`
+                  )}`}
                 />
               ))}
             </div>
@@ -202,6 +206,7 @@ export default function Home() {
       </AnimateIn>
 
       <MapSection />
+      </main>
 
       <Footer
         links={[
@@ -209,19 +214,8 @@ export default function Home() {
           { label: "Rooms", href: "#stay" },
           { label: "Experiences", href: "#experiences" },
           { label: "Gallery", href: "#gallery" },
-          { label: "Contact", href: "#contact" },
+          { label: "Contact", href: "/contact" },
         ]}
-        socialLinks={[
-          { platform: "facebook", href: siteConfig.social.facebook },
-          { platform: "instagram", href: siteConfig.social.instagram },
-          { platform: "youtube", href: siteConfig.social.youtube },
-          { platform: "whatsapp", href: siteConfig.social.whatsapp },
-        ]}
-        logo={
-          <span className="font-heading text-2xl font-bold text-primary-foreground">
-            {siteConfig.name.split(" ").slice(-1)[0]}
-          </span>
-        }
       />
       <WhatsAppFloat
         phoneNumber={siteConfig.social.whatsappNumber}

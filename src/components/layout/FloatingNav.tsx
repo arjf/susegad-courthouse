@@ -7,7 +7,7 @@ import {
   Home,
   Bed,
   Compass,
-  Image,
+  Image as ImageIcon,
   Star,
   MapPin,
 } from "lucide-react";
@@ -16,7 +16,7 @@ const sectionIcons: Record<string, React.ReactNode> = {
   Home: <Home size={16} />,
   Bed: <Bed size={16} />,
   Compass: <Compass size={16} />,
-  Image: <Image size={16} />,
+  Image: <ImageIcon size={16} />,
   Star: <Star size={16} />,
   MapPin: <MapPin size={16} />,
 };

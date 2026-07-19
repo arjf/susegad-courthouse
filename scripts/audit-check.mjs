@@ -1,14 +1,15 @@
-const { chromium } = require("playwright");
+import { chromium } from "playwright";
 
 (async () => {
-  const browser = await chromium.launch({ 
-    headless: true, 
-    executablePath: "/nix/store/jjcz2k4gr3a2xq92fh1ap8723s2h69x2-playwright-chromium-headless-shell/chrome-headless-shell-linux64/chrome-headless-shell" 
+  const browser = await chromium.launch({
+    headless: true,
+    executablePath:
+      "/nix/store/jjcz2k4gr3a2xq92fh1ap8723s2h69x2-playwright-chromium-headless-shell/chrome-headless-shell-linux64/chrome-headless-shell",
   });
-  const context = await browser.newContext({ 
-    viewport: { width: 430, height: 932 }, 
-    isMobile: true, 
-    deviceScaleFactor: 3 
+  const context = await browser.newContext({
+    viewport: { width: 430, height: 932 },
+    isMobile: true,
+    deviceScaleFactor: 3,
   });
   const page = await context.newPage();
   await page.goto("http://localhost:3004", { waitUntil: "networkidle" });
@@ -22,9 +23,16 @@ const { chromium } = require("playwright");
       if (mainFlex) {
         r.mainFlexRect = mainFlex.getBoundingClientRect();
         const children = Array.from(mainFlex.children);
-        r.mainFlexChildren = children.map(c => {
+        r.mainFlexChildren = children.map((c) => {
           const rc = c.getBoundingClientRect();
-          return { tag: c.tagName, class: c.className.slice(0,80), top: Math.round(rc.top), bottom: Math.round(rc.bottom), height: Math.round(rc.height), width: Math.round(rc.width) };
+          return {
+            tag: c.tagName,
+            class: c.className.slice(0, 80),
+            top: Math.round(rc.top),
+            bottom: Math.round(rc.bottom),
+            height: Math.round(rc.height),
+            width: Math.round(rc.width),
+          };
         });
       }
     }

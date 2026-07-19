@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local dev/audit tooling (nix-host specific, not app code).
+    "scripts/**",
   ]),
 ]);
 
