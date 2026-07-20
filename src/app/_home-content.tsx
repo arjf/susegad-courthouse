@@ -5,6 +5,7 @@ import { siteConfig } from "@/lib/config";
 import NavBar from "@/components/layout/NavBar";
 import FloatingNav from "@/components/layout/FloatingNav";
 import HeroSection from "@/components/sections/HeroSection";
+import ComingSoon from "@/components/ComingSoon";
 import RoomCard from "@/components/cards/RoomCard";
 import ExperienceCard from "@/components/cards/ExperienceCard";
 import ImageGallery from "@/components/sections/ImageGallery";
@@ -33,7 +34,11 @@ export default function Home() {
       <NavBar externalLinks={siteConfig.nav.external} />
       <FloatingNav />
       <main>
-      <HeroSection />
+      {process.env.NEXT_PUBLIC_COMING_SOON === "true" ? (
+        <ComingSoon variant="hero" />
+      ) : (
+        <HeroSection />
+      )}
 
       <AnimateIn direction="up">
         <section id="about" className="bg-secondary py-12 md:py-24">
