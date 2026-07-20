@@ -22,16 +22,19 @@ const footerSocialLinks = [
   { platform: "whatsapp", href: social.whatsapp },
 ];
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://susegad-courthouse.vercel.app";
+const siteHost = new URL(siteUrl).hostname.replace(/^www\./, "");
+
 export const siteConfig = {
   name: "The Susegad Courtyard",
-  url:
-    process.env.NEXT_PUBLIC_SITE_URL || "https://susegad-courthouse.vercel.app",
+  url: siteUrl,
   tagline: "Come as a Guest, Leave as Family",
   description:
     "A heritage standalone home, five minutes from Anjuna Beach. Self-catered stays surrounded by nature-preserved greenery.",
 
   contact: {
-    email: "hello@susegadcourtyard.com",
+    email: `hello@${siteHost}`,
     phone: "+91 99999 99999",
     address: "Near Anjuna Beach, Anjuna, Goa 403509, India",
     mapCoordinates: { lat: 15.5839, lng: 73.7489 }, // 15°35'02.0"N 73°44'55.9"E
