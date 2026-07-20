@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { adminPost } from "@/lib/admin-fetch";
 
 export default function AdminDebug() {
   const [sentryResult, setSentryResult] = useState("");
@@ -11,7 +12,7 @@ export default function AdminDebug() {
   const triggerSentryError = async () => {
     setSentryResult("Triggering...");
     try {
-      const res = await fetch("/api/debug/sentry-test", { method: "POST" });
+      const res = await adminPost("/api/debug/sentry-test");
       if (res.ok) {
         setSentryResult("Sentry test error sent! Check your Sentry dashboard.");
       } else {
@@ -26,11 +27,7 @@ export default function AdminDebug() {
     if (!emailSubject) return;
     setEmailResult("Sending...");
     try {
-      const res = await fetch("/api/debug/test-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject: emailSubject, body: emailBody }),
-      });
+      const res = await adminPost("/api/debug/test-email", { subject: emailSubject, body: emailBody });
       const data = await res.json();
       setEmailResult(data.success ? "Email sent! Check your inbox." : `Failed: ${data.error}`);
     } catch {
@@ -40,7 +37,7 @@ export default function AdminDebug() {
 
   const sendTestPosthog = async () => {
     try {
-      const res = await fetch("/api/debug/posthog-test", { method: "POST" });
+      const res = await adminPost("/api/debug/posthog-test");
       if (res.ok) {
         setSentryResult("PostHog test event sent!");
       }

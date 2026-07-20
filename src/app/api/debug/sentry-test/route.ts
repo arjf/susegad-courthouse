@@ -1,7 +1,8 @@
 import { getUser } from "@/lib/supabase/server";
+import { withCsrf } from "@/lib/csrf";
 import * as Sentry from "@sentry/nextjs";
 
-export async function POST() {
+export const POST = withCsrf(async function () {
   const user = await getUser();
 
   if (!user) {
@@ -13,4 +14,4 @@ export async function POST() {
   console.log("[admin-debug] Sentry test error captured by:", user.email);
 
   return new Response(null, { status: 204 });
-}
+});

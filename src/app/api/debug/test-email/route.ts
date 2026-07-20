@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getUser } from "@/lib/supabase/server";
+import { withCsrf } from "@/lib/csrf";
 
-export async function POST(req: NextRequest) {
+export const POST = withCsrf(async function (req: Request) {
   const user = await getUser();
 
   if (!user) {
@@ -41,4 +42,4 @@ export async function POST(req: NextRequest) {
 
   console.log(`[debug/test-email] Test email sent to ${user.email}`);
   return NextResponse.json({ success: true });
-}
+});

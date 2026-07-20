@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getUser } from "@/lib/supabase/server";
+import { withCsrf } from "@/lib/csrf";
 
-export async function POST() {
+export const POST = withCsrf(async function () {
   const user = await getUser();
 
   if (!user) {
@@ -39,4 +40,4 @@ export async function POST() {
     console.error("[debug/posthog-test] Error:", err);
     return NextResponse.json({ error: "Network error" }, { status: 500 });
   }
-}
+});

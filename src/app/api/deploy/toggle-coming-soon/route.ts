@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getUser } from "@/lib/supabase/server";
+import { withCsrf } from "@/lib/csrf";
 
-export async function POST() {
+export const POST = withCsrf(async function () {
   const user = await getUser();
 
   if (!user) {
@@ -76,4 +77,4 @@ export async function POST() {
     console.error("[toggle-coming-soon] Error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
-}
+});

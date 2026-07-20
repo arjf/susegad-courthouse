@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { useCsrfToken } from "@/components/admin/CsrfTokenProvider";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -12,38 +13,52 @@ export default function AdminLogin() {
   const [isResetMode, setIsResetMode] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const getCsrf = useCsrfToken();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setMessage("");
+    setIsLoggingIn(true);
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const csrf = await getCsrf();
+    if (!csrf) {
+      setError("Session expired. Please refresh the page.");
+      setIsLoggingIn(false);
+      return;
+    }
 
-    if (signInError) {
-      if (signInError.message.includes("Invalid login credentials")) {
-        setError("Invalid email or password.");
-      } else {
-        setError(signInError.message);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Login failed.");
+        setIsLoggingIn(false);
+        return;
       }
-      return;
+
+      if (data.passwordResetRequired) {
+        setIsResetMode(true);
+        setMessage("Please set a new password before continuing.");
+        setIsLoggingIn(false);
+        return;
+      }
+
+      router.push("/adm");
+      router.refresh();
+    } catch {
+      setError("Network error. Please try again.");
+      setIsLoggingIn(false);
     }
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (user?.user_metadata?.password_reset_required) {
-      setIsResetMode(true);
-      setMessage("Please set a new password before continuing.");
-      return;
-    }
-
-    router.push("/adm");
-    router.refresh();
   };
 
   const handleReset = async (e: React.FormEvent) => {
@@ -72,8 +87,18 @@ export default function AdminLogin() {
     setIsGenerating(true);
     setError("");
 
+    const csrf = await getCsrf();
+    if (!csrf) {
+      setError("Session expired. Please refresh the page.");
+      setIsGenerating(false);
+      return;
+    }
+
     try {
-      const res = await fetch("/api/auth/setup-admin", { method: "POST" });
+      const res = await fetch("/api/auth/setup-admin", {
+        method: "POST",
+        headers: { "X-CSRF-Token": csrf },
+      });
       const data = await res.json();
       if (data.success) {
         setMessage(`Admin account created! Check Vercel Runtime Logs for credentials. ${data.hint}`);
@@ -135,9 +160,10 @@ export default function AdminLogin() {
               </div>
               <button
                 type="submit"
-                className="rounded-lg bg-stone-800 px-6 py-2.5 font-body text-sm font-medium text-white hover:bg-stone-700"
+                disabled={isLoggingIn}
+                className="rounded-lg bg-stone-800 px-6 py-2.5 font-body text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-50"
               >
-                Sign in
+                {isLoggingIn ? "Signing in..." : "Sign in"}
               </button>
             </form>
 

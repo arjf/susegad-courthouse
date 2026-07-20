@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
+import { withCsrf } from "@/lib/csrf";
 import crypto from "node:crypto";
 
-export async function POST() {
+export const POST = withCsrf(async function () {
   const supabase = await createAdminClient();
 
   const { data: { users } } = await supabase.auth.admin.listUsers();
@@ -41,4 +42,4 @@ export async function POST() {
     message: "Admin account created. Credentials have been printed to the server console.",
     hint: "Check your server logs (Vercel Runtime Logs) for the email and password.",
   });
-}
+});
