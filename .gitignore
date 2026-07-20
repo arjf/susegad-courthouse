@@ -49,4 +49,4 @@ test-results/
 *.test.ts
 *.test.js
 .env*
-.kilo/roadmap.md
+roadmap.md
