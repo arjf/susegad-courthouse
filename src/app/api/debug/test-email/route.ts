@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const user = await getUser();
 
-  if (!session) {
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -28,7 +27,7 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({
       from: "debug@thesusegadcourtyard.com",
-      to: session.user.email!,
+      to: user.email!,
       subject,
       text: body || "This is a test email from the Susegad admin debug panel.",
     }),
@@ -40,6 +39,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
   }
 
-  console.log(`[debug/test-email] Test email sent to ${session.user.email}`);
+  console.log(`[debug/test-email] Test email sent to ${user.email}`);
   return NextResponse.json({ success: true });
 }

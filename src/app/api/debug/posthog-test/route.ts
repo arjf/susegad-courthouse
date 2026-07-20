@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/server";
 
 export async function POST() {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const user = await getUser();
 
-  if (!session) {
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

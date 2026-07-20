@@ -1,12 +1,19 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { ReactNode } from "react";
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/server";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const headersList = await headers();
+  const host = headersList.get("host") || "";
 
-  if (!session) {
+  if (!host.startsWith("adm.") && !host.startsWith("localhost")) {
+    redirect("/");
+  }
+
+  const user = await getUser();
+
+  if (!user) {
     redirect("/adm/login");
   }
 
