@@ -1,13 +1,18 @@
-import type { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/config";
 
+const staticRoutes = [
+  { path: "/", priority: 1.0, changeFrequency: "weekly" as const },
+  { path: "/about", priority: 0.7, changeFrequency: "monthly" as const },
+  { path: "/explore", priority: 0.6, changeFrequency: "monthly" as const },
+  { path: "/contact", priority: 0.8, changeFrequency: "monthly" as const },
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = siteConfig.url;
-  const now = new Date();
-  return [
-    { url: `${base}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
-    { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/explore`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.5 },
-  ];
+  return staticRoutes.map((route) => ({
+    url: `${siteConfig.url}${route.path}`,
+    lastModified: new Date(),
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
+  }));
 }

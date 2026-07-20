@@ -1,0 +1,9 @@
+{
+  "name": "The Susegad Courtyard",
+  "short_name": "Susegad",
+  "description": "A heritage courtyard home near Anjuna Beach, Goa.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAFAF9",
+  "theme_color": "#8B7D6B"
+}

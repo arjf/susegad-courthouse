@@ -1,7 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/config";
+import { lodgingBusinessSchema, websiteSchema, jsonLdScript } from "@/lib/json-ld";
+import { PostHogProvider, MetaPixelProvider, GA4Provider } from "@/components/providers/Analytics";
+import { PosthogPageView } from "@/lib/posthog";
+import { Analytics } from "@vercel/analytics/react";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair",
@@ -17,7 +21,15 @@ const poppins = Poppins({
 
 const isComingSoon = process.env.NEXT_PUBLIC_COMING_SOON === "true";
 
-const baseMetadata: Metadata = {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#8B7D6B",
+};
+
+export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
     default: isComingSoon
@@ -37,7 +49,15 @@ const baseMetadata: Metadata = {
     "vacation rental Goa",
   ],
   authors: [{ name: siteConfig.name }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
   alternates: { canonical: "/" },
+  formatDetection: { telephone: true, email: true, address: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -49,14 +69,9 @@ const baseMetadata: Metadata = {
     description: isComingSoon
       ? "A heritage courtyard home near Anjuna Beach, Goa. Opening soon."
       : "A heritage standalone home, five minutes from Anjuna Beach. Self-catered stays surrounded by nature-preserved greenery.",
-    images: [
-      {
-        url: siteConfig.gallery[0].src,
-        width: 1200,
-        height: 800,
-        alt: siteConfig.gallery[0].alt,
-      },
-    ],
+    images: siteConfig.gallery.length > 0
+      ? [{ url: `${siteConfig.url}${siteConfig.gallery[0].src}`, width: 1200, height: 800, alt: siteConfig.gallery[0].alt }]
+      : [],
   },
   twitter: {
     card: "summary_large_image",
@@ -66,73 +81,17 @@ const baseMetadata: Metadata = {
     description: isComingSoon
       ? "A heritage courtyard home near Anjuna Beach, Goa. Opening soon."
       : "A heritage standalone home, five minutes from Anjuna Beach. Self-catered stays surrounded by nature-preserved greenery.",
-    images: [siteConfig.gallery[0].src],
+    images: siteConfig.gallery.length > 0 ? [`${siteConfig.url}${siteConfig.gallery[0].src}`] : [],
   },
-  robots: isComingSoon
-    ? { index: true, follow: true, googleBot: { index: true, follow: true } }
-    : {
-        index: true,
-        follow: true,
-        googleBot: { index: true, follow: true, "max-image-preview": "large" },
-      },
-  category: isComingSoon ? undefined : "travel",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/favicon.svg", sizes: "any", type: "image/svg+xml" }],
+  },
+  manifest: "/manifest.json",
+  appleWebApp: { capable: true, statusBarStyle: "default", title: siteConfig.name },
 };
 
-export const metadata: Metadata = baseMetadata;
-
-const jsonLd = isComingSoon
-  ? {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      name: siteConfig.name,
-      description: "A heritage courtyard home near Anjuna Beach, Goa. Opening soon.",
-      url: siteConfig.url,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Anjuna",
-        addressRegion: "Goa",
-        addressCountry: "IN",
-      },
-    }
-  : {
-      "@context": "https://schema.org",
-      "@type": "LodgingBusiness",
-      name: siteConfig.name,
-      description: siteConfig.description,
-      url: siteConfig.url,
-      image: siteConfig.gallery.map((g) => g.src),
-      telephone: siteConfig.contact.phone,
-      email: siteConfig.contact.email,
-      priceRange: "₹₹",
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: "Near Anjuna Beach",
-        addressLocality: "Anjuna",
-        addressRegion: "Goa",
-        postalCode: "403509",
-        addressCountry: "IN",
-      },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: siteConfig.contact.mapCoordinates.lat,
-        longitude: siteConfig.contact.mapCoordinates.lng,
-      },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: siteConfig.property.rating,
-        reviewCount: siteConfig.property.reviewCount,
-      },
-      amenityFeature: siteConfig.property.amenities.map((name) => ({
-        "@type": "LocationFeatureSpecification",
-        name,
-        value: true,
-      })),
-    };
-
-const jsonLdString = JSON.stringify(jsonLd)
-  .replace(/</g, "\\u003c")
-  .replace(/>/g, "\\u003e")
-  .replace(/&/g, "\\u0026");
+const jsonLdScripts = [websiteSchema(), lodgingBusinessSchema()].map(jsonLdScript);
 
 export default function RootLayout({
   children,
@@ -140,16 +99,41 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${playfairDisplay.variable} ${poppins.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${playfairDisplay.variable} ${poppins.variable} h-full antialiased`}>
+      <head>
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');`,
+              }}
+            />
+          </>
+        )}
+        {jsonLdScripts.map((script, i) => (
+          <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: script }} />
+        ))}
+      </head>
       <body className="min-h-full min-w-full flex flex-col bg-secondary text-primary">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdString }}
-        />
-        {children}
+        <PostHogProvider>
+          <PosthogPageView />
+          <MetaPixelProvider>
+            <GA4Provider>
+              {children}
+            </GA4Provider>
+          </MetaPixelProvider>
+        </PostHogProvider>
+
+        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
+          <noscript>
+            <img
+              height="1" width="1" style={{ display: "none" }}
+              src={`https://www.facebook.com/tr?id=${process.env.NEXT_PUBLIC_META_PIXEL_ID}&ev=PageView&noscript=1`}
+            />
+          </noscript>
+        )}
+        <Analytics />
       </body>
     </html>
   );
