@@ -48,3 +48,4 @@ playwright.config.ts
 test-results/
 *.test.ts
 *.test.js
+.env*
