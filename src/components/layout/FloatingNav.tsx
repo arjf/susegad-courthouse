@@ -22,7 +22,10 @@ const sectionIcons: Record<string, React.ReactNode> = {
 };
 
 export default function FloatingNav() {
-  const sections = siteConfig.nav.sections;
+  const isComingSoon = process.env.NEXT_PUBLIC_COMING_SOON === "true";
+  const sections = siteConfig.nav.sections.filter(
+    (s) => !isComingSoon || s.label !== "Gallery"
+  );
 
   return (
     <motion.nav

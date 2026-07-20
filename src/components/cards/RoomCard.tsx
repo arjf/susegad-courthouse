@@ -17,6 +17,7 @@ interface RoomCardProps {
   priceLabel?: string;
   symbol?: string;
   href?: string;
+  hideImage?: boolean;
 }
 
 const amenityIcons: Record<string, string> = {
@@ -38,6 +39,7 @@ export default function RoomCard({
   priceLabel = "/night",
   symbol = "₹",
   href,
+  hideImage,
 }: RoomCardProps) {
   return (
     <motion.div
@@ -48,16 +50,18 @@ export default function RoomCard({
       whileHover={{ y: -6 }}
     >
       <Card size="sm" className="group h-full">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        </div>
-        <CardContent className="mt-4">
+        {!hideImage && (
+          <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+        )}
+        <CardContent className={hideImage ? "mt-0" : "mt-4"}>
           <div className="flex items-start justify-between">
             <h3 className="font-heading text-lg font-semibold text-primary">{title}</h3>
             <Users size={16} className="mt-1 shrink-0 text-muted-foreground" />

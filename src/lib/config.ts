@@ -82,28 +82,11 @@ export const siteConfig = {
 
   rooms: [
     {
-      image:
-        "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80",
+      image: "",
       title: "Entire Home — The Courtyard House",
       price: 12000,
       capacity: 6,
-      amenities: ["WiFi", "Power Backup", "Washing Machine", "Stocked Kitchen", "Fridge", "Private Entrance"],
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=800&q=80",
-      title: "Master Suite — Garden View",
-      price: 4500,
-      capacity: 2,
-      amenities: ["WiFi", "Fridge", "Private Washroom", "Work Desk"],
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
-      title: "Standard Room — Courtyard Side",
-      price: 3500,
-      capacity: 2,
-      amenities: ["WiFi", "Shared Kitchen", "Washroom", "Furnished"],
+      amenities: ["WiFi", "Power Backup", "Washing Machine", "Stocked Kitchen", "Fridge", "Private Entrance", "Garden View", "Work Desk"],
     },
   ],
 
@@ -146,6 +129,8 @@ export const siteConfig = {
     { src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&q=80", alt: "Greenery Surroundings" },
     { src: "https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=1200&q=80", alt: "Gate & Walkway" },
   ],
+
+  showGallery: false,
 
   testimonials: [
     {

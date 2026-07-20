@@ -117,7 +117,7 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mx-auto max-w-md">
               {siteConfig.rooms.map((room, i) => (
                 <RoomCard
                   key={room.title}
@@ -130,6 +130,7 @@ export default function Home() {
                   priceLabel="/night"
                   symbol={symbol}
                   href={siteConfig.booking.airbnbUrl}
+                  hideImage
                 />
               ))}
             </div>
@@ -175,21 +176,23 @@ export default function Home() {
         </section>
       </AnimateIn>
 
-      <AnimateIn direction="up" delay={0.1}>
-        <section id="gallery" className="bg-primary/5 py-12 md:py-24">
-          <div className="mx-auto max-w-7xl px-6">
-            <div className="mb-8 text-center md:mb-12">
-              <span className="font-body text-sm font-medium uppercase tracking-widest text-accent1">
-                Gallery
-              </span>
-              <h2 className="mt-4 font-heading text-4xl font-bold text-primary md:text-5xl">
-                A Glimpse of Paradise
-              </h2>
+      {siteConfig.showGallery && (
+        <AnimateIn direction="up" delay={0.1}>
+          <section id="gallery" className="bg-primary/5 py-12 md:py-24">
+            <div className="mx-auto max-w-7xl px-6">
+              <div className="mb-8 text-center md:mb-12">
+                <span className="font-body text-sm font-medium uppercase tracking-widest text-accent1">
+                  Gallery
+                </span>
+                <h2 className="mt-4 font-heading text-4xl font-bold text-primary md:text-5xl">
+                  A Glimpse of Paradise
+                </h2>
+              </div>
+              <ImageGallery images={siteConfig.gallery} lightbox={true} />
             </div>
-            <ImageGallery images={siteConfig.gallery} lightbox={true} />
-          </div>
-        </section>
-      </AnimateIn>
+          </section>
+        </AnimateIn>
+      )}
 
       <AnimateIn direction="up">
         <section id="reviews" className="bg-secondary py-12 md:py-24">

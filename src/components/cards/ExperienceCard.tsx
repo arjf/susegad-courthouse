@@ -51,7 +51,7 @@ export default function ExperienceCard({
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/90 from-10% via-primary/40 via-40% to-transparent" />
         <Badge
           variant="secondary"
           className="absolute top-4 left-4 bg-accent2 text-primary-foreground hover:bg-accent2"

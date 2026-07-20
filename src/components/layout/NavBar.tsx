@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
@@ -15,6 +15,12 @@ interface NavBarProps {
 export default function NavBar({ externalLinks }: NavBarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const isComingSoon = process.env.NEXT_PUBLIC_COMING_SOON === "true";
+
+  const visibleLinks = useMemo(
+    () => isComingSoon ? externalLinks.filter((l) => l.href === "/about") : externalLinks,
+    [isComingSoon, externalLinks]
+  );
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -41,7 +47,7 @@ export default function NavBar({ externalLinks }: NavBarProps) {
         </Link>
 
         <ul className="hidden items-center gap-8 md:flex">
-          {externalLinks.map((link, i) => (
+          {visibleLinks.map((link, i) => (
             <motion.li
               key={link.href}
               initial={{ opacity: 0, y: -20 }}
@@ -58,20 +64,22 @@ export default function NavBar({ externalLinks }: NavBarProps) {
           ))}
         </ul>
 
-        <motion.div
-          className="hidden md:block"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.4, duration: 0.3 }}
-        >
-          <a
-            href={siteConfig.booking.airbnbUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+        {!isComingSoon && (
+          <motion.div
+            className="hidden md:block"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, duration: 0.3 }}
           >
-            <PrimaryButton text="Book on Airbnb" variant="accent1" size="sm" />
-          </a>
-        </motion.div>
+            <a
+              href={siteConfig.booking.airbnbUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <PrimaryButton text="Book on Airbnb" variant="accent1" size="sm" />
+            </a>
+          </motion.div>
+        )}
 
         <button
           className="md:hidden"
@@ -96,7 +104,7 @@ export default function NavBar({ externalLinks }: NavBarProps) {
             className="overflow-hidden bg-secondary border-t border-border md:hidden"
           >
             <ul className="flex flex-col gap-4 px-6 py-6">
-              {externalLinks.map((link) => (
+              {visibleLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -107,19 +115,21 @@ export default function NavBar({ externalLinks }: NavBarProps) {
                   </Link>
                 </li>
               ))}
-              <li>
-                <a
-                  href={siteConfig.booking.airbnbUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <PrimaryButton
-                    text="Book on Airbnb"
-                    variant="accent1"
-                    size="default"
-                  />
-                </a>
-              </li>
+              {!isComingSoon && (
+                <li>
+                  <a
+                    href={siteConfig.booking.airbnbUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <PrimaryButton
+                      text="Book on Airbnb"
+                      variant="accent1"
+                      size="default"
+                    />
+                  </a>
+                </li>
+              )}
             </ul>
           </motion.div>
         )}
