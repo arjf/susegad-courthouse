@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { ComingSoonToggle } from "@/components/admin/ComingSoonToggle";
 
 interface StatusItem {
   label: string;
@@ -8,11 +6,11 @@ interface StatusItem {
   detail: string;
 }
 
-function buildStatusItems(): { items: StatusItem[]; comingSoon: boolean } {
+function buildStatusItems(): StatusItem[] {
   const items: StatusItem[] = [];
 
   const addEnv = (name: string, label: string) => {
-    const val = typeof process !== "undefined" ? process.env[name] : undefined;
+    const val = process.env[name];
     items.push({
       label,
       status: val ? "ok" : "error",
@@ -29,6 +27,8 @@ function buildStatusItems(): { items: StatusItem[]; comingSoon: boolean } {
   addEnv("NEXT_PUBLIC_SENTRY_DSN", "Sentry DSN");
   addEnv("RESEND_API_KEY", "Resend");
   addEnv("SLACK_BOT_TOKEN", "Slack Bot");
+  addEnv("VERCEL_TOKEN", "Vercel API Token");
+  addEnv("VERCEL_PROJECT_ID", "Vercel Project ID");
 
   const cs = process.env.NEXT_PUBLIC_COMING_SOON === "true";
   items.push({
@@ -43,37 +43,16 @@ function buildStatusItems(): { items: StatusItem[]; comingSoon: boolean } {
     detail: "Listing not yet live on Airbnb",
   });
 
-  return { items, comingSoon: cs };
+  return items;
 }
 
-const initialStatus = buildStatusItems();
-
 export default function AdminDashboard() {
-  const [status] = useState<StatusItem[]>(initialStatus.items);
-  const isComingSoon = initialStatus.comingSoon;
-
-  const handleToggleComingSoon = async () => {
-    if (confirm("Toggle coming-soon mode and redeploy? This will trigger a Vercel deployment.")) {
-      const res = await fetch("/api/deploy/toggle-coming-soon", { method: "POST" });
-      if (res.ok) {
-        alert("Redeploy triggered. The site will update in a few minutes.");
-      } else {
-        alert("Failed to trigger redeploy. Check server logs.");
-      }
-    }
-  };
+  const status = buildStatusItems();
+  const isComingSoon = process.env.NEXT_PUBLIC_COMING_SOON === "true";
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="font-heading text-3xl font-bold text-stone-800">Dashboard</h1>
-        <button
-          onClick={handleToggleComingSoon}
-          className="rounded-lg bg-stone-800 px-6 py-2 font-body text-sm font-medium text-white hover:bg-stone-700"
-        >
-          Toggle Coming Soon &amp; Redeploy
-        </button>
-      </div>
+      <ComingSoonToggle initial={isComingSoon} />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {status.map((item) => (

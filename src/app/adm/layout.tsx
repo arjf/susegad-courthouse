@@ -51,7 +51,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 }
 
 async function CsrfHiddenInput() {
-  const { generateCsrfToken } = await import("@/lib/csrf");
-  const token = await generateCsrfToken();
-  return <input type="hidden" name="_csrf" value={token} />;
+  const { generateSignedCsrfToken } = await import("@/lib/csrf");
+  const token = generateSignedCsrfToken();
+  return <input type="hidden" name="_csrf_signed" value={token} />;
 }

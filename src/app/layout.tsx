@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/config";
@@ -93,18 +94,22 @@ export const metadata: Metadata = {
 
 const jsonLdScripts = [websiteSchema(), lodgingBusinessSchema()].map(jsonLdScript);
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const h = await headers();
+  const nonce = h.get("x-nonce") ?? undefined;
+
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${poppins.variable} h-full antialiased`}>
       <head>
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+            <script async nonce={nonce} src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
             <script
+              nonce={nonce}
               dangerouslySetInnerHTML={{
                 __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');`,
               }}
@@ -112,7 +117,7 @@ export default function RootLayout({
           </>
         )}
         {jsonLdScripts.map((script, i) => (
-          <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: script }} />
+          <script key={i} type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: script }} />
         ))}
       </head>
       <body className="min-h-full min-w-full flex flex-col bg-secondary text-primary">

@@ -3,12 +3,8 @@ import { cookies } from "next/headers";
 
 const CSRF_COOKIE = "_csrf_token";
 const TOKEN_LENGTH = 32;
-
-function serializeCookie(value: string, opts: { maxAge?: number; sameSite?: "lax" | "strict" } = {}): string {
-  const parts = [`${CSRF_COOKIE}=${value}`, "Path=/", "HttpOnly", "Secure", `SameSite=${opts.sameSite ?? "strict"}`];
-  if (opts.maxAge) parts.push(`Max-Age=${opts.maxAge}`);
-  return parts.join("; ");
-}
+const CSRF_SALT = crypto.randomBytes(32).toString("hex");
+const SIGNED_TOKEN_TTL_MS = 30 * 60 * 1000;
 
 export async function generateCsrfToken(): Promise<string> {
   const token = crypto.randomBytes(TOKEN_LENGTH).toString("hex");
@@ -17,23 +13,43 @@ export async function generateCsrfToken(): Promise<string> {
     httpOnly: true,
     secure: true,
     sameSite: "strict",
-    path: "/adm",
+    path: "/",
   });
   return token;
 }
 
-export async function validateCsrfToken(submittedToken: string | null | undefined): Promise<boolean> {
-  if (!submittedToken) return false;
-  const cookieStore = await cookies();
-  const storedToken = cookieStore.get(CSRF_COOKIE)?.value;
-  if (!storedToken) return false;
+export function generateSignedCsrfToken(): string {
+  const payload = `${Date.now()}`;
+  const hmac = crypto.createHmac("sha256", CSRF_SALT).update(payload).digest();
+  const encoded = Buffer.from(payload).toString("base64url");
+  const signature = hmac.toString("base64url");
+  return `${encoded}.${signature}`;
+}
 
-  const storedBuf = Buffer.from(storedToken);
-  const submittedBuf = Buffer.from(submittedToken);
+export function verifySignedCsrfToken(token: string): boolean {
+  const parts = token.split(".");
+  if (parts.length !== 2) return false;
+  const [encoded, signature] = parts;
 
-  if (storedBuf.length !== submittedBuf.length) return false;
+  let payload: string;
+  try {
+    payload = Buffer.from(encoded, "base64url").toString();
+  } catch {
+    return false;
+  }
 
-  return crypto.timingSafeEqual(storedBuf, submittedBuf);
+  const expectedHmac = crypto.createHmac("sha256", CSRF_SALT).update(payload).digest();
+  const expectedSig = expectedHmac.toString("base64url");
+
+  const sigBuf = Buffer.from(signature);
+  const expectedBuf = Buffer.from(expectedSig);
+  if (sigBuf.length !== expectedBuf.length) return false;
+  if (!crypto.timingSafeEqual(sigBuf, expectedBuf)) return false;
+
+  const timestamp = parseInt(payload, 10);
+  if (isNaN(timestamp)) return false;
+
+  return Date.now() - timestamp < SIGNED_TOKEN_TTL_MS;
 }
 
 export async function rotateCsrfToken(): Promise<string> {
@@ -43,16 +59,12 @@ export async function rotateCsrfToken(): Promise<string> {
     httpOnly: true,
     secure: true,
     sameSite: "strict",
-    path: "/adm",
+    path: "/",
   });
   return token;
 }
 
 type CsrfProtectedHandler = (request: Request) => Promise<Response>;
-type CsrfRouteHandler = {
-  POST?: CsrfProtectedHandler;
-  GET?: CsrfProtectedHandler;
-};
 
 export function withCsrf(handler: CsrfProtectedHandler): CsrfProtectedHandler {
   return async (request: Request) => {
@@ -61,20 +73,38 @@ export function withCsrf(handler: CsrfProtectedHandler): CsrfProtectedHandler {
     }
 
     const contentType = request.headers.get("content-type") || "";
-    let token: string | null = null;
+    const cookieToken = (await cookies()).get(CSRF_COOKIE)?.value ?? null;
+    let submittedToken: string | null = null;
+    let signedToken: string | null = null;
 
-    token = request.headers.get("X-CSRF-Token");
+    submittedToken = request.headers.get("X-CSRF-Token");
 
-    if (!token && contentType.includes("application/json")) {
+    if (!submittedToken && contentType.includes("application/json")) {
       const body = await request.clone().json();
-      token = body._csrf || null;
-    } else if (!token && (contentType.includes("multipart/form-data") || contentType.includes("application/x-www-form-urlencoded"))) {
-      const formData = await request.clone().formData();
-      token = (formData.get("_csrf") as string) || null;
+      submittedToken = body._csrf || null;
     }
 
-    const isValid = await validateCsrfToken(token);
-    if (!isValid) {
+    if (contentType.includes("multipart/form-data") || contentType.includes("application/x-www-form-urlencoded")) {
+      const formData = await request.clone().formData();
+      submittedToken = (formData.get("_csrf") as string) || null;
+      signedToken = (formData.get("_csrf_signed") as string) || null;
+    }
+
+    let valid = false;
+
+    if (submittedToken && cookieToken) {
+      const sBuf = Buffer.from(submittedToken);
+      const cBuf = Buffer.from(cookieToken);
+      if (sBuf.length === cBuf.length) {
+        valid = crypto.timingSafeEqual(sBuf, cBuf);
+      }
+    }
+
+    if (!valid && signedToken) {
+      valid = verifySignedCsrfToken(signedToken);
+    }
+
+    if (!valid) {
       return new Response(JSON.stringify({ error: "Invalid or missing CSRF token" }), {
         status: 403,
         headers: { "Content-Type": "application/json" },
