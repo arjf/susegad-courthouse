@@ -1,0 +1,40 @@
+import { redirect } from "next/navigation";
+import { ReactNode } from "react";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    redirect("/adm/login");
+  }
+
+  return (
+    <div className="min-h-screen bg-stone-50">
+      <nav className="border-b border-stone-200 bg-white px-6 py-3">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
+          <a href="/adm" className="font-heading text-lg font-bold text-stone-800">
+            Susegad Admin
+          </a>
+          <div className="flex items-center gap-4">
+            <a href="/adm/debug" className="font-body text-sm text-stone-500 hover:text-stone-800">
+              Debug
+            </a>
+            <form action="/adm/logout" method="post">
+              <button
+                type="submit"
+                className="rounded-md bg-stone-800 px-4 py-1.5 font-body text-sm text-white hover:bg-stone-700"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
+        </div>
+      </nav>
+      <main className="mx-auto max-w-6xl px-6 py-8">
+        {children}
+      </main>
+    </div>
+  );
+}
